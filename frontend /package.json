@@ -1,0 +1,45 @@
+{
+  "name": "refit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "refit",
+  "author": "juriakajurek",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "dependencies": {
+    "gatsby": "^2.32.3",
+    "gatsby-image": "^2.11.0",
+    "gatsby-plugin-manifest": "^2.12.0",
+    "gatsby-plugin-offline": "^3.10.0",
+    "gatsby-plugin-react-helmet": "^3.10.0",
+    "gatsby-plugin-sass": "^3.2.0",
+    "gatsby-plugin-sharp": "^2.14.0",
+    "gatsby-plugin-sitemap": "^2.12.0",
+    "gatsby-source-filesystem": "^2.11.0",
+    "gatsby-source-google-places": "0.0.7",
+    "gatsby-source-strapi": "0.0.12",
+    "gatsby-transformer-sharp": "^2.12.0",
+    "react": "^16.14.0",
+    "react-date-picker": "^8.0.7",
+    "react-dom": "^16.13.1",
+    "react-geocode": "^0.2.2",
+    "react-google-autocomplete": "^1.2.6",
+    "react-google-maps": "^9.4.5",
+    "react-helmet": "^6.1.0",
+    "react-places-autocomplete": "^7.3.0",
+    "sass": "^1.32.6",
+    "source": "0.0.3",
+    "strapi": "^3.4.6"
+  },
+  "devDependencies": {
+    "@types/googlemaps": "^3.43.2"
+  }
+}
