@@ -1,4 +1,6 @@
 .input {
+  display: flex;
+  justify-content: center;
   margin: 1.5rem 0 1.5rem 0;
 
   width: 90%;
@@ -9,13 +11,13 @@
   font-family: "Red Hat Display", sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 19px;
   /* identical to box height */
   display: flex;
   align-items: center;
   border: none;
-  padding: 2% 5% 2%;
+  padding: 0.8rem 2rem 0.8rem;
   letter-spacing: 0.01em;
   color: black;
   ::placeholder {

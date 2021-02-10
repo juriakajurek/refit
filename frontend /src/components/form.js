@@ -143,7 +143,11 @@ const Form = () => {
         <p className={formStyles.question}>
           Wybierz pomieszczenia którymi mamy się zająć.
         </p>
-        <RoomLabel>label</RoomLabel>
+        <RoomLabel>Kuchnia</RoomLabel>
+        <RoomLabel>Łazienka 1</RoomLabel>
+        <RoomLabel>Łazienka 2</RoomLabel>
+        <RoomLabel>Przedpokój</RoomLabel>
+        <p className={(formStyles.questionm, formStyles.black)}>Inne</p>
       </form>
     </header>
   ) : (
