@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import formStyles from "./form.module.scss";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
+import inputFieldStyles from "./inputField.module.scss";
+import PlacesAutocomplete from "react-places-autocomplete";
 import DatePicker from "react-date-picker";
+import InputField from "./inputField";
+import RoomLabel from "./roomLabel";
 
 /*global google*/
 
@@ -22,10 +22,34 @@ const Form = () => {
   };
 
   const handleSelect = (address) => {
-    geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
-      .then((latLng) => console.log("Success", latLng))
-      .catch((error) => console.error("Error", error));
+    console.log(address);
+    setAddress(address);
+    // geocodeByAddress(address)
+    //   .then((results) => getLatLng(results[0]))
+    //   .then((latLng) => console.log("Success", latLng))
+    //   .catch((error) => console.error("Error", error));
+  };
+
+  const manageArea = (value) => {
+    if (
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].includes(
+        parseInt(
+          value[
+            value.length - 1 //jesli ostatnia jest cyfrą
+          ]
+        )
+      ) &&
+      !value[value.length - 2].match(/[a-z]/i) //i przed ostatnia nie jest literą
+    ) {
+      return value + "m²";
+    } else if (
+      value[value.length - 2] === "m" &&
+      value[value.length - 1] === "2"
+    ) {
+      let curr = value;
+      curr = curr.replace("2", "²");
+      return curr.toString();
+    } else return value;
   };
 
   return typeof google === "object" && typeof google.maps === "object" ? (
@@ -76,24 +100,19 @@ const Form = () => {
               <input
                 {...getInputProps({
                   placeholder: "Adres inwestycji",
-                  className: "location-search-input",
+                  className: inputFieldStyles.input,
                 })}
               />
-              <div className="autocomplete-dropdown-container">
+              <div className={formStyles.dropdownContainer}>
                 {loading && <div>Loading...</div>}
                 {suggestions.map((suggestion) => {
                   const className = suggestion.active
-                    ? "suggestion-item--active"
-                    : "suggestion-item";
-                  // inline style for demonstration purpose
-                  const style = suggestion.active
-                    ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                    : { backgroundColor: "#ffffff", cursor: "pointer" };
+                    ? formStyles.activeSuggestionItem
+                    : formStyles.suggestionItem;
                   return (
                     <div
                       {...getSuggestionItemProps(suggestion, {
                         className,
-                        style,
                       })}
                     >
                       <span>{suggestion.description}</span>
@@ -104,8 +123,27 @@ const Form = () => {
             </div>
           )}
         </PlacesAutocomplete>
+        <DatePicker
+          onChange={setStartDate}
+          value={startDate}
+          className={inputFieldStyles.input}
+        />
 
-        <DatePicker onChange={setStartDate} value={startDate} />
+        <p className={formStyles.question}>
+          Jaka jest powierzchnia użytkowa inwestycji?
+        </p>
+        <InputField
+          placeholder="np. 60m²"
+          onBlur={(i) => {
+            i.currentTarget.value = manageArea(
+              i.currentTarget.value.toString()
+            );
+          }}
+        ></InputField>
+        <p className={formStyles.question}>
+          Wybierz pomieszczenia którymi mamy się zająć.
+        </p>
+        <RoomLabel>label</RoomLabel>
       </form>
     </header>
   ) : (
