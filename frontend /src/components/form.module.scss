@@ -1,5 +1,6 @@
 .form {
   background: #fff;
+  // display: flex;
 }
 
 .formModule {
@@ -13,9 +14,16 @@
     letter-spacing: 0.1rem;
     line-height: 24px;
     color: #888888;
-    cursor: pointer;
     &.black {
+      font-weight: 600;
       color: #000000;
+    }
+    &.hint {
+      margin-top: 0%;
+      text-align: center;
+      font-size: 14px;
+      line-height: 17px;
+      color: #888888;
     }
   }
 
@@ -31,7 +39,7 @@
     }
     font-family: "Red Hat Display", sans-serif;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 20px;
     letter-spacing: 0.1rem;
     color: #000000;
 
@@ -55,12 +63,6 @@
   }
 }
 
-// .locationSearchInput {
-//   padding: 10%;
-//   background: red;
-//   width: 100%;
-// }
-
 .dropdownContainer {
   background: white;
 }
@@ -70,4 +72,44 @@
 }
 .activeSuggestionItem {
   background: green;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  .button {
+    width: 90%;
+    height: 3rem;
+  }
+}
+.labelsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // margin: 1rem;
+  .roomLabel {
+    margin: 0.3rem 0.3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.2rem 1rem;
+    background-color: #000000;
+    border-radius: 16px;
+    height: 3rem;
+    width: min-content;
+    .paragraph {
+      font-family: "Red Hat Display", sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 19px;
+      max-height: 19px;
+      letter-spacing: 0.1rem;
+      color: #ffffff;
+      max-lines: 1;
+      white-space: nowrap;
+    }
+    .icon {
+      margin-left: 1rem;
+    }
+  }
 }

@@ -4,8 +4,8 @@ import Plus from "../images/plus.svg";
 
 const RoomLabel = (props) => {
   return (
-    <div className={roomLabelStyles.container}>
-      <img className={roomLabelStyles.icon} src={Plus} alt="React Logo"></img>
+    <div className={roomLabelStyles.container} onClick={props.onClick}>
+      <img className={roomLabelStyles.icon} src={Plus} alt="Add sign"></img>
       <p className={roomLabelStyles.title}>{props.children}</p>
     </div>
   );
