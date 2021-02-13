@@ -15,6 +15,9 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.9",
+    "@apollo/react-hooks": "^4.0.0",
+    "apollo-boost": "^0.4.9",
     "gatsby": "^2.32.3",
     "gatsby-image": "^2.11.0",
     "gatsby-plugin-manifest": "^2.12.0",
@@ -27,7 +30,9 @@
     "gatsby-source-google-places": "0.0.7",
     "gatsby-source-strapi": "0.0.12",
     "gatsby-transformer-sharp": "^2.12.0",
+    "graphql": "^15.5.0",
     "react": "^16.14.0",
+    "react-apollo": "^3.1.5",
     "react-date-picker": "^8.0.7",
     "react-dom": "^16.13.1",
     "react-geocode": "^0.2.2",

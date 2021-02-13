@@ -1,6 +1,17 @@
-.input {
+.inputContainer {
   display: flex;
   justify-content: center;
+}
+
+.icon {
+  position: absolute;
+  right: 4%;
+  padding: 1.2rem 2rem 0.8rem;
+  margin: 1.5rem 0 1.5rem 0;
+}
+.input {
+  justify-content: center;
+  display: flex;
   margin: 1.5rem 0 1.5rem 0;
 
   width: 90%;
@@ -18,9 +29,22 @@
   align-items: center;
   border: none;
   padding: 0.8rem 2rem 0.8rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.03em;
   color: black;
   ::placeholder {
     opacity: 0.2;
+  }
+  &.button {
+    background-color: black;
+    color: #f5f5f5;
+    height: 3.9rem;
+    width: 100%;
+    font-size: 20px;
+    display: inline-block;
+    cursor: pointer;
+    &.disable {
+      opacity: 0.5;
+      cursor: default;
+    }
   }
 }
