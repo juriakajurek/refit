@@ -224,19 +224,23 @@ const Form = () => {
         </PlacesAutocomplete>
 
         <div className={inputFieldStyles.inputContainer}>
-          <DatePicker
-            onChange={(e) => {
-              setStartDate({ name: "startDate", value: e });
-            }}
-            value={startDate.value}
-            className={inputFieldStyles.input}
-          />
+          <div className={inputFieldStyles.input}>
+            <DatePicker
+              onChange={(e) => {
+                setStartDate({ name: "startDate", value: e });
+              }}
+              value={startDate.value}
+              className={inputFieldStyles.datePicker}
+              calendarClassName={inputFieldStyles.calendar}
+            />
+          </div>
         </div>
 
         <p className={formStyles.question}>
           Jaka jest powierzchnia użytkowa inwestycji?
         </p>
         <InputField
+          spellcheck="false"
           placeholder="np. 60m²"
           value={flatArea.value}
           onBlur={(i) => {
