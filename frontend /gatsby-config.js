@@ -12,10 +12,16 @@ module.exports = {
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
     "gatsby-plugin-offline",
+    // {
+    //   resolve: "gatsby-plugin-apollo",
+    //   options: {
+    //     uri: "http://localhost:1337/graphql",
+    //   },
+    // },
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        icon: "src/images/icon.png",
+        icon: "src/images/logo_splashscreen.png",
       },
     },
     "gatsby-transformer-sharp",
@@ -32,7 +38,7 @@ module.exports = {
       options: {
         apiURL: "http://localhost:1337",
         queryLimit: 1000,
-        contentTypes: [`services`],
+        contentTypes: [`services`, `rooms`, `questionnaires`],
       },
     },
   ],

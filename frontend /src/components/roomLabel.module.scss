@@ -1,0 +1,36 @@
+.container {
+  //   margin: 0.5rem 0 0.5rem 0;
+  margin: 0;
+  padding: 0;
+  padding: 1rem 0.5rem 1rem;
+
+  width: 90%;
+  height: 1.8em;
+
+  font-family: "Red Hat Display", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+
+  //   padding: 0.5rem 1rem 0.5rem;
+  color: black;
+  letter-spacing: 0.01em;
+  background: none;
+}
+
+.icon {
+  //   background-color: red;
+  height: 1.5rem;
+
+  width: 1.5rem;
+}
+
+.title {
+  margin-left: 1.3rem;
+  margin-top: 1.3rem;
+}
