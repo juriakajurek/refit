@@ -22,6 +22,9 @@
     },
     "startDate": {
       "type": "string"
+    },
+    "selectedRooms": {
+      "type": "json"
     }
   }
 }

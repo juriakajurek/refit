@@ -12,16 +12,16 @@ module.exports = {
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
     "gatsby-plugin-offline",
-    // {
-    //   resolve: "gatsby-plugin-apollo",
-    //   options: {
-    //     uri: "http://localhost:1337/graphql",
-    //   },
-    // },
     {
       resolve: "gatsby-plugin-manifest",
       options: {
         icon: "src/images/logo_splashscreen.png",
+      },
+    },
+    {
+      resolve: "gatsby-plugin-apollo",
+      options: {
+        uri: "http://localhost:1337/graphql",
       },
     },
     "gatsby-transformer-sharp",

@@ -7,41 +7,13 @@ import InputField from "./inputField";
 import X from "../images/x.svg";
 import RoomLabel from "./roomLabel";
 import { graphql, useStaticQuery } from "gatsby";
+import { gql, useMutation } from "@apollo/client";
 // import { useMutation, gql } from "@apollo/client";
 
 /*global google*/
 
 const Form = () => {
-  const [isHouse, setIsHouse] = useState({});
-  const [address, setAddress] = useState({ name: "address", value: "" });
-  const [startDate, setStartDate] = useState({
-    name: "startDate",
-    value: new Date(),
-  });
-  const [flatArea, setFlatArea] = useState({
-    name: "flatArea",
-    value: 0,
-  });
-  const [selectedRooms, setSelectedRooms] = useState({
-    name: "selectedRooms",
-    value: ["Kuchnia", "Łazienka", "Przedpokój", "Pokój", "Pokój 2"],
-  });
-  const [customRoom, setCustomRoom] = useState({
-    name: "customRoom",
-    value: "",
-  });
-
-  const [, updateState] = useState();
-  // const [createLink] = useMutation(CREATE_LINK_MUTATION, {
-  //   variables: {
-  //     isHouse: isHouse,
-  //     address: address,
-  //     startDate: startDate,
-  //     flatArea: flatArea,
-  //   },
-  // });
-
-  const data = useStaticQuery(graphql`
+  const getRooms = useStaticQuery(graphql`
     {
       allStrapiRooms {
         edges {
@@ -54,16 +26,59 @@ const Form = () => {
     }
   `);
 
-  // const CREATE_LINK_MUTATION = gql`
-  //   mutation PostMutation($description: String!, $url: String!) {
-  //     post(description: $description, url: $url) {
-  //       id
-  //       createdAt
-  //       url
-  //       description
-  //     }
-  //   }
-  // `;
+  const ADD_QUESTIONNAIRE = gql`
+    mutation AddQuestionnaire(
+      $isHouse: Boolean!
+      $flatArea: Float!
+      $address: String!
+      $startDate: String!
+      $selectedRooms: JSON!
+    ) {
+      createQuestionnaire(
+        input: {
+          data: {
+            isHouse: $isHouse
+            flatArea: $flatArea
+            address: $address
+            startDate: $startDate
+            selectedRooms: $selectedRooms
+          }
+        }
+      ) {
+        questionnaire {
+          isHouse
+          flatArea
+          address
+          startDate
+          selectedRooms
+          id
+        }
+      }
+    }
+  `;
+
+  const [isHouse, setIsHouse] = useState({});
+  const [address, setAddress] = useState({ name: "address", value: "" });
+  const [startDate, setStartDate] = useState({
+    name: "startDate",
+    value: new Date(),
+  });
+  const [flatArea, setFlatArea] = useState({
+    name: "flatArea",
+    value: 0,
+  });
+  const [selectedRooms, setSelectedRooms] = useState({
+    name: "selectedRooms",
+    value: [],
+  });
+  const [customRoom, setCustomRoom] = useState({
+    name: "customRoom",
+    value: "",
+  });
+
+  const [addTodo, { data }] = useMutation(ADD_QUESTIONNAIRE);
+
+  const [, updateState] = useState();
 
   useEffect((e) => {
     // localStorage.setItem(isHouse.name, isHouse.value);
@@ -109,7 +124,7 @@ const Form = () => {
     // // }
   });
 
-  const rooms = data.allStrapiRooms.edges;
+  const rooms = getRooms.allStrapiRooms.edges;
 
   const update = () => {
     updateState({});
@@ -149,9 +164,30 @@ const Form = () => {
     } else return value;
   };
 
+  const isFormCompleted = () => {
+    if (isHouse) return false;
+  };
   return typeof google === "object" && typeof google.maps === "object" ? (
     <header className={formStyles.form}>
-      <form className={formStyles.formModule}>
+      <form
+        className={formStyles.formModule}
+        onSubmit={(e) => {
+          e.preventDefault();
+          // prettier-ignore
+          addTodo({
+            variables: {
+              isHouse: Boolean(isHouse.value),
+              flatArea: parseFloat(flatArea.value.match(/\d/g).join("")),
+              address: address.value,
+              startDate: startDate.value.toISOString(),
+              selectedRooms: {
+                "name": selectedRooms.name,
+                "value": selectedRooms.value,
+              },
+            },
+          });
+        }}
+      >
         <p className={formStyles.question}>Czym mamy się zająć?</p>
         <div className={formStyles.radio}>
           <label>
@@ -256,47 +292,68 @@ const Form = () => {
         <p className={formStyles.question}>
           Wybierz pomieszczenia którymi mamy się zająć.
         </p>
+
         <div className={formStyles.labelsContainer}>
           {selectedRooms.value.map((el) => {
             return (
-              <div className={formStyles.roomLabel}>
-                <p className={formStyles.paragraph}>{el}</p>
-                <img
-                  className={formStyles.icon}
-                  src={X}
-                  onClick={() => {}}
-                  alt="X sign"
-                ></img>
-              </div>
+              <li key={el.id} style={{ listStyleType: "none" }}>
+                <div className={formStyles.roomLabel}>
+                  <p className={formStyles.paragraph}>{el}</p>
+                  <img
+                    className={formStyles.icon}
+                    src={X}
+                    onClick={(e) => {
+                      let rooms = selectedRooms.value.filter((el) => {
+                        return el != e.target.parentNode.children[0].innerText;
+                      });
+                      console.log(rooms);
+                      setSelectedRooms({
+                        name: "selectedRooms",
+                        value: rooms,
+                      });
+                    }}
+                    alt="X sign"
+                  ></img>
+                </div>
+              </li>
             );
           })}
         </div>
         {rooms.map((el) => {
           return (
-            <RoomLabel
-              onClick={() => {
-                const a = selectedRooms.value.reverse().find((e) => {
-                  return e.includes(el.node.Name) + "";
-                });
-                setSelectedRooms({
-                  name: "selectedRooms",
-                  value: [
-                    ...selectedRooms.value,
+            <li key={el.id} style={{ listStyleType: "none" }}>
+              <RoomLabel
+                onClick={() => {
+                  const lastSimilarItem = selectedRooms.value
+                    .reverse()
+                    .find((e) => {
+                      return e.includes(el.node.Name) + "";
+                    });
+                  setSelectedRooms({
+                    name: "selectedRooms",
+                    value: [
+                      ...selectedRooms.value.reverse(),
 
-                    selectedRooms.value.includes(el.node.Name) &&
-                    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].includes(
-                      a[a.length - 1]
-                    )
-                      ? el.node.Name + " " + (parseInt(a[a.length - 1], 10) + 1)
-                      : selectedRooms.value.includes(el.node.Name)
-                      ? el.node.Name + " " + "2"
-                      : el.node.Name,
-                  ],
-                });
-              }}
-            >
-              {el.node.Name}
-            </RoomLabel>
+                      selectedRooms.value.includes(el.node.Name) &&
+                      Array.isArray(
+                        lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g)
+                      ) &&
+                      lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g)
+                        .length
+                        ? el.node.Name +
+                          " " +
+                          (parseInt(lastSimilarItem.match(/\d+/).join(""), 10) +
+                            1)
+                        : selectedRooms.value.includes(el.node.Name)
+                        ? el.node.Name + " " + "2"
+                        : el.node.Name,
+                    ],
+                  });
+                }}
+              >
+                {el.node.Name}
+              </RoomLabel>
+            </li>
           );
         })}
         <p className={`${formStyles.question} ${formStyles.black}`}>Inne</p>
@@ -311,23 +368,46 @@ const Form = () => {
             });
           }}
           onClick={(e) => {
-            console.log(customRoom.value);
-            // setSelectedRooms({
-            //   name: "selectedRooms",
-            //   value: [...selectedRooms.value, el.node.Name],
-            // });
+            if (
+              selectedRooms.value.includes(
+                e.target.parentNode.children[0].value
+              )
+            ) {
+              alert("Pomieszczenie o takiej nazwie zostało już dodane.");
+            } else if (selectedRooms.value == "") {
+              alert("Musisz podać nazwę pomieszczenia.");
+            } else {
+              setSelectedRooms({
+                name: "selectedRooms",
+                value: [
+                  ...selectedRooms.value,
+                  e.target.parentNode.children[0].value,
+                ],
+              });
+            }
           }}
           onBlur={(i) => {}}
         ></InputField>
 
         <div className={inputFieldStyles.inputContainer}>
-          <button
-            type="button"
-            disabled
-            className={`${inputFieldStyles.input} ${inputFieldStyles.button} ${inputFieldStyles.disable}`}
-          >
-            Dalej
-          </button>
+          {isFormCompleted() ? (
+            <button
+              id="submit-button"
+              type="submit"
+              className={`${inputFieldStyles.input} ${inputFieldStyles.button}`}
+            >
+              Dalej
+            </button>
+          ) : (
+            <button
+              disabled
+              id="submit-button"
+              type="submit"
+              className={`${inputFieldStyles.input} ${inputFieldStyles.button} ${inputFieldStyles.disable}`}
+            >
+              Dalej
+            </button>
+          )}
         </div>
         <p className={`${formStyles.question} ${formStyles.hint}`}>
           Aby przejść dalej uzupełnij pola powyżej
