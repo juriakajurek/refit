@@ -14,7 +14,6 @@ const client = new ApolloClient({
 });
 export default function HTML(props) {
   const API_KEY = process.env.GATSBY_REFIT_API_KEY;
-
   return (
     <ApolloProvider client={client}>
       <html {...props.htmlAttributes}>

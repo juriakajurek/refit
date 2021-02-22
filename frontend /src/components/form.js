@@ -6,86 +6,85 @@ import DatePicker from "react-date-picker";
 import InputField from "./inputField";
 import X from "../images/x.svg";
 import RoomLabel from "./roomLabel";
-import { graphql, useStaticQuery } from "gatsby";
+import { graphql, Link, useStaticQuery } from "gatsby";
 import { gql, useMutation } from "@apollo/client";
+import Paragraph from "./paragraph";
+import PlaceInput from "./placeInput";
+import RadioInput from "./radioInput";
+import LinkButton from "./linkButton";
+import { removeArgumentsFromDocument } from "@apollo/client/utilities";
 // import { useMutation, gql } from "@apollo/client";
 
 /*global google*/
 
-const Form = () => {
-  const getRooms = useStaticQuery(graphql`
-    {
-      allStrapiRooms {
-        edges {
-          node {
-            Name
-            id
-          }
-        }
-      }
-    }
-  `);
+const Form = (props) => {
+  // const ADD_QUESTIONNAIRE = gql`
+  //   mutation AddQuestionnaire(
+  //     $isHouse: Boolean!
+  //     $flatArea: Float!
+  //     $address: String!
+  //     $startDate: String!
+  //     $selectedRooms: JSON!
+  //   ) {
+  //     createQuestionnaire(
+  //       input: {
+  //         data: {
+  //           isHouse: $isHouse
+  //           flatArea: $flatArea
+  //           address: $address
+  //           startDate: $startDate
+  //           selectedRooms: $selectedRooms
+  //         }
+  //       }
+  //     ) {
+  //       questionnaire {
+  //         isHouse
+  //         flatArea
+  //         address
+  //         startDate
+  //         selectedRooms
+  //         id
+  //       }
+  //     }
+  //   }
+  // `;
+  // const [isHouse, setIsHouse] = useState({});
 
-  const ADD_QUESTIONNAIRE = gql`
-    mutation AddQuestionnaire(
-      $isHouse: Boolean!
-      $flatArea: Float!
-      $address: String!
-      $startDate: String!
-      $selectedRooms: JSON!
-    ) {
-      createQuestionnaire(
-        input: {
-          data: {
-            isHouse: $isHouse
-            flatArea: $flatArea
-            address: $address
-            startDate: $startDate
-            selectedRooms: $selectedRooms
-          }
-        }
-      ) {
-        questionnaire {
-          isHouse
-          flatArea
-          address
-          startDate
-          selectedRooms
-          id
-        }
-      }
-    }
-  `;
-
-  const [isHouse, setIsHouse] = useState({});
-  const [address, setAddress] = useState({ name: "address", value: "" });
-  const [startDate, setStartDate] = useState({
-    name: "startDate",
-    value: new Date(),
-  });
-  const [flatArea, setFlatArea] = useState({
-    name: "flatArea",
-    value: 0,
-  });
-  const [selectedRooms, setSelectedRooms] = useState({
-    name: "selectedRooms",
-    value: [],
-  });
   const [customRoom, setCustomRoom] = useState({
     name: "customRoom",
     value: "",
   });
-
-  const [addTodo, { data }] = useMutation(ADD_QUESTIONNAIRE);
-
+  const [isFormCompleted, setFormCompleted] = useState(false);
   const [, updateState] = useState();
+  // const [addTodo, { data }] = useMutation(ADD_QUESTIONNAIRE);
 
-  useEffect((e) => {
-    // localStorage.setItem(isHouse.name, isHouse.value);
+  useEffect(() => {
+    console.log(props.rooms);
+    // props.setIsHouse({
+    //   name: "isHouse",
+    //   value: localStorage.getItem("isHouse") || null,
+    // });
+  }, []);
+  useEffect(() => {
+    if (checkForm()) {
+      setFormCompleted(true);
+    } else {
+      setFormCompleted(false);
+    }
+    console.log(
+      props.isHouse,
+      props.address,
+      props.startDate,
+      props.flatArea,
+      props.selectedRooms,
+      customRoom
+    );
+
     // localStorage.setItem(address.name, address.value);
     // localStorage.setItem(startDate.name, startDate.value);
     // localStorage.setItem(flatArea.name, flatArea.value);
     // localStorage.setItem(selectedRooms.name, selectedRooms.value);
+    // localStorage.setItem(customRoom.name, customRoom.value);
     // console.log(
     //   localStorage.getItem("isHouse") +
     //     " | " +
@@ -95,55 +94,85 @@ const Form = () => {
     //     " | " +
     //     localStorage.getItem("flatArea") +
     //     " | " +
-    //     localStorage.getItem("selectedRooms")
+    //     localStorage.getItem("selectedRooms") +
+    //     " | " +
+    //     localStorage.getItem("customRoom")
     // );
-    // console.log(isHouse);
-    // console.log(Boolean(isHouse.value));
-    // if (localStorage.getItem("isHouse") == String(isHouse.value)) {
-    //   setIsHouse({
-    //     name: "isHouse",
-    //     value: Boolean(localStorage.getItem("isHouse")), ///////////MUSZE TO debagować
-    //   });
-    // }
-    // if (localStorage.getItem("address") !== String(address.value)) {
-    //   setAddress({ name: "address", value: localStorage.getItem("address") });
-    // }
-    // // if (localStorage.getItem("startDate") !== startDate) {
-    // //   setStartDate({
-    // //     name: "startDate",
-    // //     value: localStorage.getItem("startDate"),
-    // //   });
-    // // }
-    // // localStorage.getItem("startDate") !==
-    // console.log(startDate);
-    // // if (localStorage.getItem("flatArea") !== address) {
-    // //   setFlatArea({
-    // //     name: "flatArea",
-    // //     value: localStorage.getItem("flatArea"),
-    // //   });
-    // // }
   });
 
-  const rooms = getRooms.allStrapiRooms.edges;
+  // setAddress({
+  //   name: "address",
+  //   value: localStorage.getItem("address") || "",
+  // });
+  // // setStartDate({
+  // //   name: "startDate",
+  // //   value: localStorage.getItem("startDate") || new Date(),
+  // // });
+  // setFlatArea({
+  //   name: "flatArea",
+  //   value: localStorage.getItem("flatArea") || "",
+  // });
+  // setSelectedRooms({
+  //   name: "selectedRooms",
+  //   value: localStorage.getItem("selectedRooms") || [],
+  // });
+  // setCustomRoom({
+  //   name: "customRoom",
+  //   value: localStorage.getItem("customRoom") || "",
+  // });
 
   const update = () => {
     updateState({});
   };
-  const handlePlaceChange = (address) => {
-    setAddress({ name: "address", value: address });
+
+  const handleRoomInput = (e) => {
+    if (
+      props.selectedRooms.value.includes(
+        e.target.parentNode.parentNode.children[0].value
+      )
+    ) {
+      alert("Pomieszczenie o takiej nazwie zostało już dodane.");
+    } else if (e.target.parentNode.parentNode.children[0].value == "") {
+      alert("Musisz podać nazwę pomieszczenia.");
+    } else {
+      props.setSelectedRooms({
+        name: "selectedRooms",
+        value: [
+          ...props.selectedRooms.value,
+          e.target.parentNode.parentNode.children[0].value,
+        ],
+      });
+    }
   };
 
-  const handlePlaceSelect = (address) => {
-    console.log(address);
-    setAddress({ name: "address", value: address });
-    // geocodeByAddress(address)
-    //   .then((results) => getLatLng(results[0]))
-    //   .then((latLng) => console.log("Success", latLng))
-    //   .catch((error) => console.error("Error", error));
+  const addRoomToSelected = (el) => {
+    const lastSimilarItem = props.selectedRooms.value.reverse().find((e) => {
+      return e.includes(el.node.title);
+    });
+    props.setSelectedRooms({
+      name: "selectedRooms",
+      value: [
+        ...props.selectedRooms.value.reverse(),
+
+        props.selectedRooms.value.includes(el.node.title) &&
+        Array.isArray(
+          lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g)
+        ) &&
+        lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g).length
+          ? el.node.title +
+            " " +
+            (parseInt(lastSimilarItem.match(/\d+/).join(""), 10) + 1)
+          : props.selectedRooms.value.includes(el.node.title)
+          ? el.node.title + " " + "2"
+          : el.node.title,
+      ],
+    });
   };
 
   const manageArea = (value) => {
     if (
+      value &&
+      value.length > 1 &&
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].includes(
         parseInt(
           value[
@@ -164,9 +193,32 @@ const Form = () => {
     } else return value;
   };
 
-  const isFormCompleted = () => {
-    if (isHouse) return false;
+  const deleteElement = (e) => {
+    let rooms = props.selectedRooms.value.filter((el) => {
+      return el != e.target.parentNode.children[0].innerText;
+    });
+    props.setSelectedRooms({
+      name: "selectedRooms",
+      value: rooms,
+    });
   };
+
+  const checkForm = () => {
+    if (
+      !!props.address.value &&
+      !!props.startDate.value &&
+      !!props.flatArea.value &&
+      parseFloat(props.flatArea.value.match(/\d/g)) &&
+      parseFloat(props.flatArea.value.match(/\d/g).join("")) > 0 &&
+      Array.isArray(props.selectedRooms.value) &&
+      props.selectedRooms.value.length > 0
+    ) {
+      return false;
+    } else {
+      return false;
+    }
+  };
+
   return typeof google === "object" && typeof google.maps === "object" ? (
     <header className={formStyles.form}>
       <form
@@ -174,188 +226,113 @@ const Form = () => {
         onSubmit={(e) => {
           e.preventDefault();
           // prettier-ignore
-          addTodo({
-            variables: {
-              isHouse: Boolean(isHouse.value),
-              flatArea: parseFloat(flatArea.value.match(/\d/g).join("")),
-              address: address.value,
-              startDate: startDate.value.toISOString(),
-              selectedRooms: {
-                "name": selectedRooms.name,
-                "value": selectedRooms.value,
-              },
-            },
-          });
+          // addTodo({
+          //   variables: {
+          //     isHouse: Boolean(isHouse.value),
+          //     flatArea: parseFloat(flatArea.value.match(/\d/g).join("")),
+          //     address: address.value,
+          //     startDate: startDate.value.toISOString(),
+          //     selectedRooms: {
+          //       "name": selectedRooms.name,
+          //       "value": selectedRooms.value,
+          //     },
+          //   },
+          // });
         }}
       >
-        <p className={formStyles.question}>Czym mamy się zająć?</p>
-        <div className={formStyles.radio}>
-          <label>
-            <input
-              type="radio"
-              value="dom"
-              checked={Boolean(isHouse.value)}
-              onChange={() => {
-                setIsHouse({ ...isHouse, value: true });
-              }}
-            />
-            <span className={formStyles.box}></span>
-            <span>Dom</span>
-          </label>
-        </div>
-        <div className={formStyles.radio}>
-          <label>
-            <input
-              type="radio"
-              value="mieszkanie"
-              checked={Boolean(!isHouse.value)}
-              onChange={() => {
-                setIsHouse({ ...isHouse, value: false });
-              }}
-            />
-            <span className={formStyles.box}></span>
-            <span> Mieszkanie</span>
-          </label>
-        </div>
+        <Paragraph>Czym mamy się zająć?</Paragraph>
+        <RadioInput
+          isHouse={props.isHouse}
+          setIsHouse={props.setIsHouse}
+          checked={!!props.isHouse.value}
+          value="dom"
+          onChange={() => {
+            props.setIsHouse({ ...props.isHouse, value: true });
+          }}
+        />
+        <RadioInput
+          isHouse={props.isHouse}
+          setIsHouse={props.setIsHouse}
+          checked={!props.isHouse.value}
+          value="mieszkanie"
+          onChange={() => {
+            props.setIsHouse({ ...props.isHouse, value: false });
+            // localStorage.setItem(props.isHouse.name, false);
+          }}
+        />
 
-        <PlacesAutocomplete
-          value={address.value || ""}
-          onChange={handlePlaceChange}
-          onSelect={handlePlaceSelect}
-        >
-          {({
-            getInputProps,
-            suggestions,
-            getSuggestionItemProps,
-            loading,
-          }) => (
-            <div>
-              <div className={inputFieldStyles.inputContainer}>
-                <input
-                  {...getInputProps({
-                    placeholder: "Adres inwestycji",
-                    className: inputFieldStyles.input,
-                  })}
-                />
-              </div>
-              <div className={formStyles.dropdownContainer}>
-                {loading && <div>Loading...</div>}
-                {suggestions.map((suggestion) => {
-                  const className = suggestion.active
-                    ? formStyles.activeSuggestionItem
-                    : formStyles.suggestionItem;
-                  return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                      })}
-                    >
-                      <span>{suggestion.description}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </PlacesAutocomplete>
+        <PlaceInput address={props.address} setAddress={props.setAddress} />
 
         <div className={inputFieldStyles.inputContainer}>
           <div className={inputFieldStyles.input}>
             <DatePicker
               onChange={(e) => {
-                setStartDate({ name: "startDate", value: e });
+                props.setStartDate({ name: "startDate", value: e });
               }}
-              value={startDate.value}
+              value={props.startDate.value}
               className={inputFieldStyles.datePicker}
               calendarClassName={inputFieldStyles.calendar}
             />
           </div>
         </div>
 
-        <p className={formStyles.question}>
-          Jaka jest powierzchnia użytkowa inwestycji?
-        </p>
+        <Paragraph>Jaka jest powierzchnia użytkowa inwestycji?</Paragraph>
         <InputField
           spellcheck="false"
+          value={props.flatArea.value}
           placeholder="np. 60m²"
-          value={flatArea.value}
+          onChange={(e) => {
+            props.setFlatArea({
+              name: props.flatArea.name,
+              value: e.target.value.toString(),
+            });
+          }}
           onBlur={(i) => {
             i.currentTarget.value = manageArea(
               i.currentTarget.value.toString()
             );
-            setFlatArea({
-              name: flatArea.name,
+            props.setFlatArea({
+              name: props.flatArea.name,
               value: i.currentTarget.value.toString(),
             });
           }}
         />
-        <p className={formStyles.question}>
-          Wybierz pomieszczenia którymi mamy się zająć.
-        </p>
 
+        <Paragraph>Wybierz pomieszczenia którymi mamy się zająć.</Paragraph>
         <div className={formStyles.labelsContainer}>
-          {selectedRooms.value.map((el) => {
-            return (
-              <li key={el.id} style={{ listStyleType: "none" }}>
-                <div className={formStyles.roomLabel}>
-                  <p className={formStyles.paragraph}>{el}</p>
-                  <img
-                    className={formStyles.icon}
-                    src={X}
-                    onClick={(e) => {
-                      let rooms = selectedRooms.value.filter((el) => {
-                        return el != e.target.parentNode.children[0].innerText;
-                      });
-                      console.log(rooms);
-                      setSelectedRooms({
-                        name: "selectedRooms",
-                        value: rooms,
-                      });
-                    }}
-                    alt="X sign"
-                  ></img>
-                </div>
-              </li>
-            );
-          })}
+          {props.selectedRooms.value
+            ? props.selectedRooms.value.map((el) => {
+                return (
+                  <li key={el} style={{ listStyleType: "none" }}>
+                    <div className={formStyles.roomLabel}>
+                      <Paragraph white>{el}</Paragraph>
+                      <img
+                        className={formStyles.icon}
+                        src={X}
+                        onClick={(e) => deleteElement(e)}
+                        alt="X sign"
+                      ></img>
+                    </div>
+                  </li>
+                );
+              })
+            : " "}
         </div>
-        {rooms.map((el) => {
-          return (
-            <li key={el.id} style={{ listStyleType: "none" }}>
-              <RoomLabel
-                onClick={() => {
-                  const lastSimilarItem = selectedRooms.value
-                    .reverse()
-                    .find((e) => {
-                      return e.includes(el.node.Name) + "";
-                    });
-                  setSelectedRooms({
-                    name: "selectedRooms",
-                    value: [
-                      ...selectedRooms.value.reverse(),
-
-                      selectedRooms.value.includes(el.node.Name) &&
-                      Array.isArray(
-                        lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g)
-                      ) &&
-                      lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g)
-                        .length
-                        ? el.node.Name +
-                          " " +
-                          (parseInt(lastSimilarItem.match(/\d+/).join(""), 10) +
-                            1)
-                        : selectedRooms.value.includes(el.node.Name)
-                        ? el.node.Name + " " + "2"
-                        : el.node.Name,
-                    ],
-                  });
-                }}
-              >
-                {el.node.Name}
-              </RoomLabel>
-            </li>
-          );
-        })}
+        {props.rooms
+          ? props.rooms.map((el) => {
+              return (
+                <li key={el.node.id} style={{ listStyleType: "none" }}>
+                  <RoomLabel
+                    onClick={() => {
+                      addRoomToSelected(el);
+                    }}
+                  >
+                    {el.node.title}
+                  </RoomLabel>
+                </li>
+              );
+            })
+          : " "}
         <p className={`${formStyles.question} ${formStyles.black}`}>Inne</p>
         <InputField
           placeholder={"np. Garderoba"}
@@ -363,52 +340,21 @@ const Form = () => {
           withIcon={true}
           onChange={(e) => {
             setCustomRoom({
-              name: flatArea.name,
+              name: customRoom.name,
               value: e.target.value,
             });
           }}
           onClick={(e) => {
-            if (
-              selectedRooms.value.includes(
-                e.target.parentNode.children[0].value
-              )
-            ) {
-              alert("Pomieszczenie o takiej nazwie zostało już dodane.");
-            } else if (selectedRooms.value == "") {
-              alert("Musisz podać nazwę pomieszczenia.");
-            } else {
-              setSelectedRooms({
-                name: "selectedRooms",
-                value: [
-                  ...selectedRooms.value,
-                  e.target.parentNode.children[0].value,
-                ],
-              });
-            }
+            handleRoomInput(e);
           }}
           onBlur={(i) => {}}
         ></InputField>
 
-        <div className={inputFieldStyles.inputContainer}>
-          {isFormCompleted() ? (
-            <button
-              id="submit-button"
-              type="submit"
-              className={`${inputFieldStyles.input} ${inputFieldStyles.button}`}
-            >
-              Dalej
-            </button>
-          ) : (
-            <button
-              disabled
-              id="submit-button"
-              type="submit"
-              className={`${inputFieldStyles.input} ${inputFieldStyles.button} ${inputFieldStyles.disable}`}
-            >
-              Dalej
-            </button>
-          )}
-        </div>
+        {isFormCompleted ? (
+          <LinkButton title="Dalej" to="/servicesChoice" />
+        ) : (
+          <LinkButton title="Dalej" to="/servicesChoice" disabled />
+        )}
         <p className={`${formStyles.question} ${formStyles.hint}`}>
           Aby przejść dalej uzupełnij pola powyżej
         </p>

@@ -1,27 +1,29 @@
 import React from "react";
 import headerStyles from "./header.module.scss";
+import ProgressBar from "./progressBar";
+import leftArrow from "../images/leftArrow.svg";
+import { Link } from "gatsby";
 
-const Header = () => {
+const Header = (props) => {
+  console.log(props.selectedStep);
   return (
     <header className={headerStyles.header}>
-      <div className={headerStyles.progressBar}>
-        <div className={headerStyles.bar}></div>
-        <div className={`${headerStyles.dot} ${headerStyles.selected}`}>
-          <p className={`${headerStyles.dotNumber} ${headerStyles.selected}`}>
-            1
-          </p>
-        </div>
-        <div className={headerStyles.dot}>
-          <p className={headerStyles.dotNumber}>2</p>
-        </div>
-        <div className={headerStyles.dot}>
-          <p className={headerStyles.dotNumber}>3</p>
-        </div>
-      </div>
-      <div className={headerStyles.headerModule}>
-        <p className={headerStyles.title}>
-          Do wyceny potrzebujemy kilka informacji na temat twojej inwestycji.{" "}
-        </p>
+      <div className={`${headerStyles.headerModule} ` + props.className}>
+        {props.backArrow ? (
+          <Link
+            to={props.selectedStep === 2 ? `/initialSurvey` : `/servicesChoice`}
+          >
+            <img
+              className={headerStyles.backArrow}
+              src={leftArrow}
+              alt="back-icon"
+            ></img>
+          </Link>
+        ) : (
+          ""
+        )}
+
+        <p className={headerStyles.title}>{props.heading}</p>
       </div>
     </header>
   );

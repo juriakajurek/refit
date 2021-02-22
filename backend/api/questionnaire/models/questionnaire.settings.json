@@ -23,8 +23,9 @@
     "startDate": {
       "type": "string"
     },
-    "selectedRooms": {
-      "type": "json"
+    "rooms": {
+      "collection": "room",
+      "via": "questionnaire"
     }
   }
 }

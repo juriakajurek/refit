@@ -1,8 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "services",
+  "collectionName": "default_rooms",
   "info": {
-    "name": "service",
+    "name": "defaultRoom",
     "description": ""
   },
   "options": {
@@ -11,13 +11,8 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "name": {
-      "type": "string",
-      "required": true
-    },
-    "category": {
-      "via": "services",
-      "model": "category"
+    "title": {
+      "type": "string"
     }
   }
 }

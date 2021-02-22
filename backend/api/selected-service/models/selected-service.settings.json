@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "selected_services",
+  "info": {
+    "name": "selectedService",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "service": {
+      "model": "service"
+    },
+    "isSelected": {
+      "type": "boolean"
+    },
+    "value": {
+      "type": "decimal"
+    },
+    "room": {
+      "model": "room",
+      "via": "selected_services"
+    }
+  }
+}

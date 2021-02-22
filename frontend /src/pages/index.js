@@ -2,9 +2,41 @@ import React from "react";
 import { Link } from "gatsby";
 import Layout from "../components/layout";
 
+import { connect } from "react-redux";
+
 const IndexPage = () => {
+  const Counter = ({ isHouse, setIsHouse }) => (
+    <div>
+      <button
+        onClick={() => {
+          console.log(isHouse + "    1");
+          setIsHouse(!isHouse);
+        }}
+      >
+        setIsHouse
+      </button>
+    </div>
+  );
+
+  const mapStateToProps = ({ isHouse }) => {
+    return { isHouse };
+  };
+
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      setIsHouse: (isHouse) => {
+        dispatch({ type: `SET_IS_HOUSE`, isHouse });
+      },
+    };
+  };
+  const ConnectedCounter = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Counter);
+
   return (
     <Layout>
+      <ConnectedCounter />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
 
       <link

@@ -12,6 +12,14 @@
   "attributes": {
     "Name": {
       "type": "string"
+    },
+    "selected_services": {
+      "via": "room",
+      "collection": "selected-service"
+    },
+    "questionnaire": {
+      "via": "rooms",
+      "model": "questionnaire"
     }
   }
 }

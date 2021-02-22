@@ -1,0 +1,28 @@
+.serviceCard {
+  margin: 0.3rem 1rem;
+  align-self: center;
+  display: flex;
+  width: 95%;
+  border-radius: 20px;
+  transition: background-color linear 0.5s;
+  &.expanded {
+    background-color: #f0f0f0;
+  }
+
+  .serviceCardHeader {
+    align-self: center;
+    display: flex;
+  }
+}
+
+.plusIcon {
+  padding: 1rem;
+  transition: transform 0.5s;
+  &.xIcon {
+    transform: rotate(45deg);
+  }
+}
+
+.icon {
+  margin: 1rem;
+}

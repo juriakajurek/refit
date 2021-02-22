@@ -37,6 +37,8 @@
     "react-google-maps": "^9.4.5",
     "react-helmet": "^6.1.0",
     "react-places-autocomplete": "^7.3.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
     "sass": "^1.32.6",
     "source": "0.0.3",
     "strapi": "^3.4.6"
