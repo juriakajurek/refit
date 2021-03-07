@@ -3,9 +3,6 @@ import progressBarStyles from "./progressBar.module.scss";
 import { Link } from "gatsby";
 
 const ProgressBar = (props) => {
-  const alertuj = (e) => {
-    console.log(e);
-  };
   return (
     <div className={progressBarStyles.progressBar}>
       <div className={progressBarStyles.barsContainer}>

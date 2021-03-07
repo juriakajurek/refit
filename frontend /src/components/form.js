@@ -13,6 +13,7 @@ import PlaceInput from "./placeInput";
 import RadioInput from "./radioInput";
 import LinkButton from "./linkButton";
 import { removeArgumentsFromDocument } from "@apollo/client/utilities";
+import RoomsForValuation from "./roomsForValuation";
 // import { useMutation, gql } from "@apollo/client";
 
 /*global google*/
@@ -59,7 +60,6 @@ const Form = (props) => {
   // const [addTodo, { data }] = useMutation(ADD_QUESTIONNAIRE);
 
   useEffect(() => {
-    console.log(props.rooms);
     // props.setIsHouse({
     //   name: "isHouse",
     //   value: localStorage.getItem("isHouse") || null,
@@ -71,14 +71,6 @@ const Form = (props) => {
     } else {
       setFormCompleted(false);
     }
-    console.log(
-      props.isHouse,
-      props.address,
-      props.startDate,
-      props.flatArea,
-      props.selectedRooms,
-      customRoom
-    );
 
     // localStorage.setItem(address.name, address.value);
     // localStorage.setItem(startDate.name, startDate.value);
@@ -243,7 +235,6 @@ const Form = (props) => {
         <Paragraph>Czym mamy się zająć?</Paragraph>
         <RadioInput
           isHouse={props.isHouse}
-          setIsHouse={props.setIsHouse}
           checked={!!props.isHouse.value}
           value="dom"
           onChange={() => {
@@ -252,7 +243,6 @@ const Form = (props) => {
         />
         <RadioInput
           isHouse={props.isHouse}
-          setIsHouse={props.setIsHouse}
           checked={!props.isHouse.value}
           value="mieszkanie"
           onChange={() => {
@@ -299,25 +289,12 @@ const Form = (props) => {
         />
 
         <Paragraph>Wybierz pomieszczenia którymi mamy się zająć.</Paragraph>
-        <div className={formStyles.labelsContainer}>
-          {props.selectedRooms.value
-            ? props.selectedRooms.value.map((el) => {
-                return (
-                  <li key={el} style={{ listStyleType: "none" }}>
-                    <div className={formStyles.roomLabel}>
-                      <Paragraph white>{el}</Paragraph>
-                      <img
-                        className={formStyles.icon}
-                        src={X}
-                        onClick={(e) => deleteElement(e)}
-                        alt="X sign"
-                      ></img>
-                    </div>
-                  </li>
-                );
-              })
-            : " "}
-        </div>
+        <RoomsForValuation
+          withoutHeader
+          selectedRooms={props.selectedRooms}
+          icon="x"
+          onClick={(e) => deleteElement(e)}
+        />
         {props.rooms
           ? props.rooms.map((el) => {
               return (
@@ -363,12 +340,9 @@ const Form = (props) => {
   ) : (
     <div>
       <h1>
-        {console.log(
-          setTimeout(() => {
-            update();
-            console.log("Ładowanie map google ...");
-          }, 10)
-        )}
+        {setTimeout(() => {
+          update();
+        }, 10)}
       </h1>
     </div>
   );

@@ -5,10 +5,12 @@ import leftArrow from "../images/leftArrow.svg";
 import { Link } from "gatsby";
 
 const Header = (props) => {
-  console.log(props.selectedStep);
   return (
     <header className={headerStyles.header}>
-      <div className={`${headerStyles.headerModule} ` + props.className}>
+      <div
+        className={`${headerStyles.headerModule} ` + props.className}
+        style={props.style}
+      >
         {props.backArrow ? (
           <Link
             to={props.selectedStep === 2 ? `/initialSurvey` : `/servicesChoice`}

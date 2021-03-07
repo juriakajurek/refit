@@ -9,6 +9,7 @@ const Paragraph = (props) => {
           props.black ? paragraphStyles.black : ""
         } ${props.white ? paragraphStyles.white : ""} ` + props.className
       }
+      style={props.style}
     >
       {props.children}
     </p>

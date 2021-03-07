@@ -9,7 +9,10 @@ const InputField = (props) => {
     <div className={inputFieldStyles.inputContainer}>
       {/* <div className={inputFieldStyles.input}> */}
       <input
-        className={inputFieldStyles.input}
+        className={`${inputFieldStyles.input} ${
+          props.white ? inputFieldStyles.white : ""
+        } ${props.horizontalFlat ? inputFieldStyles.horizontalFlat : ""} `}
+        style={props.style}
         placeholder={props.placeholder}
         onBlur={props.onBlur}
         onChange={props.onChange}

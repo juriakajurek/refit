@@ -12,8 +12,8 @@
   },
   "attributes": {
     "services": {
-      "collection": "service",
-      "via": "category"
+      "via": "category",
+      "collection": "service"
     },
     "title": {
       "type": "string"

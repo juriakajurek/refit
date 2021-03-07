@@ -16,8 +16,14 @@
       "required": true
     },
     "category": {
-      "via": "services",
-      "model": "category"
+      "model": "category",
+      "via": "services"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "hint": {
+      "type": "string"
     }
   }
 }

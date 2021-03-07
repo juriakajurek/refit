@@ -21,7 +21,6 @@ const InitialSurvey = () => {
   `);
 
   const rooms = getDefaultRooms.allStrapiDefaultRooms.edges;
-  console.log(rooms);
   const mapStateToProps = ({
     isHouse,
     address,
@@ -55,7 +54,6 @@ const InitialSurvey = () => {
 
   return (
     <Layout
-      className={initialSurveyStyles.initialSurveyModule}
       heading="Do wyceny potrzebujemy kilka informacji na temat twojej inwestycji."
       selectedStep={1}
     >

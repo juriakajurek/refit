@@ -9,7 +9,6 @@ const IndexPage = () => {
     <div>
       <button
         onClick={() => {
-          console.log(isHouse + "    1");
           setIsHouse(!isHouse);
         }}
       >

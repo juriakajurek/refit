@@ -14,8 +14,16 @@ const RoomServices = (props) => {
         edges {
           node {
             title
+            services {
+              hint
+              placeholder
+              name
+              id
+            }
             icon {
               url
+              ext
+              name
             }
           }
         }

@@ -1,22 +1,41 @@
 .serviceCard {
-  margin: 0.3rem 1rem;
-  align-self: center;
   display: flex;
-  width: 95%;
+  flex-direction: column;
+  align-self: center;
+
+  padding: 0.5rem 1rem 1rem 1rem;
+  margin: 0.25rem 0;
+  width: 90%;
   border-radius: 20px;
-  transition: background-color linear 0.5s;
+  transition: background-color 0.8s ease-in-out;
   &.expanded {
+    transition: background-color 0.8s ease-in-out;
     background-color: #f0f0f0;
   }
-
   .serviceCardHeader {
-    align-self: center;
     display: flex;
+    flex-direction: row;
+    align-self: flex-start;
+  }
+
+  .serviceCardBody {
+    display: flex;
+    flex-direction: column;
+
+    // transition-delay: 1s;
+    transition: max-height 0.8s;
+    max-height: 0;
+    overflow: hidden;
+    &.expanded {
+      // transition-delay: 1s;
+      transition: max-height 2s;
+      max-height: 5000px;
+    }
   }
 }
 
 .plusIcon {
-  padding: 1rem;
+  // padding: 0 0 0 1rem;
   transition: transform 0.5s;
   &.xIcon {
     transform: rotate(45deg);
@@ -24,5 +43,5 @@
 }
 
 .icon {
-  margin: 1rem;
+  margin: 1rem 1rem 1rem 2rem;
 }
