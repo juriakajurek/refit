@@ -27,8 +27,16 @@ const InitialSurvey = () => {
     startDate,
     flatArea,
     selectedRooms,
+    serviceForms,
   }) => {
-    return { isHouse, address, startDate, flatArea, selectedRooms };
+    return {
+      isHouse,
+      address,
+      startDate,
+      flatArea,
+      selectedRooms,
+      serviceForms,
+    };
   };
 
   const mapDispatchToProps = (dispatch) => {
@@ -47,6 +55,9 @@ const InitialSurvey = () => {
       },
       setSelectedRooms: (selectedRooms) => {
         dispatch({ type: `SET_SELECTED_ROOMS`, selectedRooms });
+      },
+      setServiceForms: (serviceForms) => {
+        dispatch({ type: `SET_SERVICE_FORMS`, serviceForms });
       },
     };
   };

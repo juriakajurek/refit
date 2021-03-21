@@ -4,6 +4,10 @@ import Paragraph from "./paragraph";
 import InputField from "./inputField";
 
 const ServiceForm = (props) => {
+  var curr = props.serviceForms.value.filter((el) => {
+    return el.name == props.showedRoom;
+  });
+
   return (
     <div className={`${ServiceFormStyles.serviceForm} `}>
       <Paragraph black className={`${ServiceFormStyles.serviceFormTitle} `}>
@@ -16,16 +20,23 @@ const ServiceForm = (props) => {
         {props.hint}
       </Paragraph>
       <InputField
-        value={props.serviceForms.value[props.id]}
+        value={curr[0].values[props.id]}
         onChange={(e) => {
-          var curr = [...props.serviceForms.value];
-          console.log(curr);
+          console.log(curr[0].values);
+          curr[0].values[props.id] = e.target.value.toString();
+          console.log(curr[0].values);
 
-          curr[props.id] = e.target.value.toString();
-          console.log(curr);
+          var mojewartosci = props.serviceForms.value.filter((el) => {
+            if (el.name == props.showedRoom) {
+              return { name: el.name, values: curr };
+            } else {
+              return el;
+            }
+          });
+
           props.setServiceForms({
             ...props.serviceForms,
-            value: [...curr],
+            value: [...mojewartosci],
           });
         }}
         horizontalFlat

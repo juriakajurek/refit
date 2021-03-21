@@ -94,6 +94,7 @@ const ServiceCard = (props) => {
               name={el.name}
               hint={el.hint}
               placeholder={el.placeholder}
+              showedRoom={props.showedRoom}
             ></ConnectedServiceForm>
           );
         })}

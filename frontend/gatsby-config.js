@@ -43,7 +43,6 @@ module.exports = {
           `rooms`,
           `questionnaires`,
           `categories`,
-          `selected-services`,
           `default-rooms`,
         ],
       },

@@ -41,7 +41,13 @@ const RoomServices = (props) => {
       </Paragraph>
       <br />
       {categories.map((el) => {
-        return <ServiceCard element={el.node} key={el.node.id} />;
+        return (
+          <ServiceCard
+            element={el.node}
+            key={el.node.id}
+            showedRoom={props.showedRoom}
+          />
+        );
       })}
     </div>
   ) : (

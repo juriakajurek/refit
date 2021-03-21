@@ -118,21 +118,21 @@ const Form = (props) => {
   };
 
   const handleRoomInput = (e) => {
-    if (
-      props.selectedRooms.value.includes(
-        e.target.parentNode.parentNode.children[0].value
-      )
-    ) {
+    let typedName =
+      e.target.parentNode.parentNode.children[0].value.charAt(0).toUpperCase() +
+      e.target.parentNode.parentNode.children[0].value.slice(1).toLowerCase();
+    if (props.selectedRooms.value.includes(typedName)) {
       alert("Pomieszczenie o takiej nazwie zostało już dodane.");
-    } else if (e.target.parentNode.parentNode.children[0].value == "") {
+    } else if (typedName == "") {
       alert("Musisz podać nazwę pomieszczenia.");
     } else {
       props.setSelectedRooms({
         name: "selectedRooms",
-        value: [
-          ...props.selectedRooms.value,
-          e.target.parentNode.parentNode.children[0].value,
-        ],
+        value: [...props.selectedRooms.value, typedName],
+      });
+      props.setServiceForms({
+        name: "serviceForms",
+        value: [...props.serviceForms.value, { name: typedName, values: [] }],
       });
     }
   };
@@ -141,23 +141,26 @@ const Form = (props) => {
     const lastSimilarItem = props.selectedRooms.value.reverse().find((e) => {
       return e.includes(el.node.title);
     });
+
+    var newRoom =
+      props.selectedRooms.value.includes(el.node.title) &&
+      Array.isArray(lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g)) &&
+      lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g).length
+        ? el.node.title +
+          " " +
+          (parseInt(lastSimilarItem.match(/\d+/).join(""), 10) + 1)
+        : props.selectedRooms.value.includes(el.node.title)
+        ? el.node.title + " " + "2"
+        : el.node.title;
+
     props.setSelectedRooms({
       name: "selectedRooms",
-      value: [
-        ...props.selectedRooms.value.reverse(),
+      value: [...props.selectedRooms.value.reverse(), newRoom],
+    });
 
-        props.selectedRooms.value.includes(el.node.title) &&
-        Array.isArray(
-          lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g)
-        ) &&
-        lastSimilarItem[lastSimilarItem.length - 1].match(/\d/g).length
-          ? el.node.title +
-            " " +
-            (parseInt(lastSimilarItem.match(/\d+/).join(""), 10) + 1)
-          : props.selectedRooms.value.includes(el.node.title)
-          ? el.node.title + " " + "2"
-          : el.node.title,
-      ],
+    props.setServiceForms({
+      name: "serviceForms",
+      value: [...props.serviceForms.value, { name: newRoom, values: [] }],
     });
   };
 
@@ -192,6 +195,14 @@ const Form = (props) => {
     props.setSelectedRooms({
       name: "selectedRooms",
       value: rooms,
+    });
+
+    let serviceForms = props.serviceForms.value.filter((el) => {
+      return el.name != e.target.parentNode.children[0].innerText;
+    });
+    props.setServiceForms({
+      name: "serviceForms",
+      value: serviceForms,
     });
   };
 
