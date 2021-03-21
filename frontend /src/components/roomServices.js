@@ -13,6 +13,7 @@ const RoomServices = (props) => {
       allStrapiCategories {
         edges {
           node {
+            id
             title
             services {
               hint
@@ -40,7 +41,7 @@ const RoomServices = (props) => {
       </Paragraph>
       <br />
       {categories.map((el) => {
-        return <ServiceCard element={el.node} />;
+        return <ServiceCard element={el.node} key={el.node.id} />;
       })}
     </div>
   ) : (

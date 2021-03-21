@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "rooms",
   "info": {
-    "name": "Room"
+    "name": "Room",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -13,13 +14,18 @@
     "Name": {
       "type": "string"
     },
-    "selected_services": {
-      "via": "room",
-      "collection": "selected-service"
-    },
     "questionnaire": {
-      "via": "rooms",
-      "model": "questionnaire"
+      "model": "questionnaire",
+      "via": "rooms"
+    },
+    "category": {
+      "model": "category"
+    },
+    "service": {
+      "model": "service"
+    },
+    "value": {
+      "type": "decimal"
     }
   }
 }

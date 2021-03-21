@@ -24,8 +24,8 @@
       "type": "string"
     },
     "rooms": {
-      "collection": "room",
-      "via": "questionnaire"
+      "via": "questionnaire",
+      "collection": "room"
     }
   }
 }

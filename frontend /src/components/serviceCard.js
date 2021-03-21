@@ -89,6 +89,7 @@ const ServiceCard = (props) => {
         {props.element.services.map((el) => {
           return (
             <ConnectedServiceForm
+              key={el.id}
               id={el.id}
               name={el.name}
               hint={el.hint}
