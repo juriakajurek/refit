@@ -34,24 +34,7 @@ const RoomsForValuation = (props) => {
                           : ""
                       }
                       onClick={(e) =>
-                        props.onClick
-                          ? 
-                          props.onClick(e)
-                          // (e) => {
-                              // var curr = {...props.valuation};
-                              // curr.rooms.map((room) => {
-                              //   if(room.name == e.target.parentNode.children[0].innerHTML){
-                              //     room.categories.map((category) => {
-                              //       category.services.map((service) => {
-                              //       })
-
-                              //     })
-                              //   }
-                              // })
-                              //   props.setValuation({...props.valuation, });
-                              
-                            // }
-                          : () => {}
+                        props.onClick ? props.onClick(e) : () => {}
                       }
                       alt="icon"
                     ></img>

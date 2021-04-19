@@ -15,8 +15,8 @@
       "type": "string"
     },
     "questionnaire": {
-      "model": "questionnaire",
-      "via": "rooms"
+      "via": "rooms",
+      "model": "questionnaire"
     },
     "category": {
       "model": "category"

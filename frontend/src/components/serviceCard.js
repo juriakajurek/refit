@@ -54,7 +54,8 @@ const ServiceCard = (props) => {
     mapStateToProps,
     mapDispatchToProps
   )(ServiceForm);
-
+  // console.log("category!!!");
+  // console.log(props.element);
   return (
     <div
       className={`${ServiceCardStyles.serviceCard} ${
@@ -95,6 +96,8 @@ const ServiceCard = (props) => {
               hint={el.hint}
               placeholder={el.placeholder}
               showedRoom={props.showedRoom}
+              categoryId={props.element.strapiId}
+              serviceId={el.id}
             ></ConnectedServiceForm>
           );
         })}

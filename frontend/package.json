@@ -1,4 +1,5 @@
 {
+  "homepage": "http://localhost:8000",
   "name": "refit",
   "version": "1.0.0",
   "private": true,
@@ -12,7 +13,9 @@
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
-    "clean": "gatsby clean"
+    "clean": "gatsby clean",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@apollo/client": "^3.3.10",
@@ -39,6 +42,7 @@
     "react-places-autocomplete": "^7.3.0",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
+    "resolve-cwd": "^3.0.0",
     "sass": "^1.32.6",
     "source": "0.0.3",
     "strapi": "^3.4.6"

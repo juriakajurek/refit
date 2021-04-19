@@ -13,6 +13,7 @@ const RoomServices = (props) => {
       allStrapiCategories {
         edges {
           node {
+            strapiId
             id
             title
             services {

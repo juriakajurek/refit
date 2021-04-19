@@ -164,30 +164,6 @@ const Form = (props) => {
     });
   };
 
-  const manageArea = (value) => {
-    if (
-      value &&
-      value.length > 1 &&
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].includes(
-        parseInt(
-          value[
-            value.length - 1 //jesli ostatnia jest cyfrą
-          ]
-        )
-      ) &&
-      !value[value.length - 2].match(/[a-z]/i) //i przed ostatnia nie jest literą
-    ) {
-      return value + "m²";
-    } else if (
-      value[value.length - 2] === "m" &&
-      value[value.length - 1] === "2"
-    ) {
-      let curr = value;
-      curr = curr.replace("2", "²");
-      return curr.toString();
-    } else return value;
-  };
-
   const deleteElement = (e) => {
     let rooms = props.selectedRooms.value.filter((el) => {
       return el != e.target.parentNode.children[0].innerText;
@@ -279,7 +255,6 @@ const Form = (props) => {
 
         <Paragraph>Jaka jest powierzchnia użytkowa inwestycji?</Paragraph>
         <InputField
-          spellcheck="false"
           value={props.flatArea.value}
           placeholder="np. 60m²"
           onChange={(e) => {
@@ -288,13 +263,11 @@ const Form = (props) => {
               value: e.target.value.toString(),
             });
           }}
-          onBlur={(i) => {
-            i.currentTarget.value = manageArea(
-              i.currentTarget.value.toString()
-            );
+          manageArea
+          setArea={(area) => {
             props.setFlatArea({
               name: props.flatArea.name,
-              value: i.currentTarget.value.toString(),
+              value: area,
             });
           }}
         />

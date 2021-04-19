@@ -3,7 +3,6 @@ import { graphql, useStaticQuery } from "gatsby";
 //import { Link } from "gatsby";
 import Layout from "../components/layout";
 import Form from "../components/form";
-import initialSurveyStyles from "./initialSurvey.module.scss";
 import { connect } from "react-redux";
 
 const InitialSurvey = () => {

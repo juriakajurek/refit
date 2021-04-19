@@ -4,6 +4,12 @@ const reducer = (state, action) => {
   switch (action.type) {
     case `SET_VALUATION`:
       return { ...state, valuation: action.valuation };
+    case `SET_FIRST_NAME`:
+      return { ...state, firstName: action.firstName };
+    case `SET_PHONE_NUMBER`:
+      return { ...state, phoneNumber: action.phoneNumber };
+    case `SET_EMAIL`:
+      return { ...state, email: action.email };
     case `SET_IS_HOUSE`:
       return { ...state, isHouse: action.isHouse };
     case `SET_ADDRESS`:
@@ -16,6 +22,8 @@ const reducer = (state, action) => {
       return { ...state, selectedRooms: action.selectedRooms };
     case `SET_SERVICE_FORMS`:
       return { ...state, serviceForms: action.serviceForms };
+    case `SET_ROOMS_IDS`:
+      return { ...state, roomsIds: action.roomsIds };
     default:
       return state;
   }
@@ -23,6 +31,9 @@ const reducer = (state, action) => {
 
 const initialState = {
   valuation: {},
+  firstName: "",
+  phoneNumber: "",
+  email: "",
   isHouse: { name: "isHouse", value: false },
   address: { name: "address", value: "" },
   startDate: {
@@ -31,7 +42,7 @@ const initialState = {
   },
   flatArea: {
     name: "flatArea",
-    value: 0,
+    value: "",
   },
   selectedRooms: {
     name: "selectedRooms",
@@ -41,6 +52,7 @@ const initialState = {
     name: "serviceForms",
     value: [],
   },
+  roomsIds: [],
 };
 
 const createStore = () => reduxCreateStore(reducer, initialState);

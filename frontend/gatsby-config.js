@@ -5,6 +5,9 @@ require("dotenv").config({
 module.exports = {
   siteMetadata: {
     title: "refit",
+    description: `refit`,
+    author: `@juriakajurek`,
+    siteUrl: `http://localhost:8000/`,
   },
   plugins: [
     "gatsby-plugin-sass",
@@ -15,7 +18,7 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        icon: "src/images/logo_splashscreen.png",
+        icon: "src/images/logo_splashscreen.svg",
       },
     },
     {

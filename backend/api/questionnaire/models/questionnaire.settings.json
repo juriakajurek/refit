@@ -24,8 +24,17 @@
       "type": "string"
     },
     "rooms": {
-      "via": "questionnaire",
-      "collection": "room"
+      "collection": "room",
+      "via": "questionnaire"
+    },
+    "email": {
+      "type": "email"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "biginteger"
     }
   }
 }
