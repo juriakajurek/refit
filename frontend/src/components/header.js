@@ -13,7 +13,13 @@ const Header = (props) => {
       >
         {props.backArrow ? (
           <Link
-            to={props.selectedStep === 2 ? `/initialSurvey` : `/servicesChoice`}
+            to={
+              props.selectedStep === 2
+                ? `/initialSurvey`
+                : props.selectedStep === 3
+                ? `/servicesChoice`
+                : `/contactForm`
+            }
           >
             <img
               className={headerStyles.backArrow}

@@ -9,10 +9,10 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {},
   "dependencies": {
     "gatsby-source-strapi": "0.0.12",
     "knex": "<0.20.0",
+    "puppeteer": "^8.0.0",
     "sqlite3": "5.0.0",
     "strapi": "3.4.6",
     "strapi-admin": "3.4.6",

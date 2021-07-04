@@ -12,6 +12,8 @@ import InputField from "../components/inputField";
 import Header from "../components/header";
 import Paragraph from "../components/paragraph";
 import LinkButton from "../components/linkButton";
+import ExternalLinkButton from "../components/externalLinkButton";
+import { getDate } from "../utils/getDate";
 
 const ADD_ROOM = gql`
   mutation AddRoom(
@@ -34,6 +36,14 @@ const ADD_ROOM = gql`
     ) {
       room {
         id
+        Name
+        service {
+          name
+          category {
+            title
+          }
+        }
+        value
       }
     }
   }
@@ -66,6 +76,7 @@ const ADD_QUESTIONNAIRE = gql`
     ) {
       questionnaire {
         id
+        created_at
       }
     }
   }
@@ -138,10 +149,17 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const ContactForm = (props) => {
+  const [isValuationSaved, setValuationSaved] = useState(false);
+  const [valuationId, setValuationId] = useState();
+  const [createdDate, setCreatedDate] = useState();
+  const [listOfRooms, setListOfRooms] = useState([]);
+
   const [addRoom, { addRoomData }] = useMutation(ADD_ROOM);
   const [addQuestionnaire, { addQuestionnaireData }] = useMutation(
     ADD_QUESTIONNAIRE
   );
+
+  const BACKEND_URL = process.env.GATSBY_BACKEND_URL;
 
   // const getService = useStaticQuery(graphql`
   //   query {
@@ -174,6 +192,140 @@ const ContactForm = (props) => {
   //       break;
   //   }
   // };
+
+  const saveValuation = async () => {
+    if (true /*!isValuationSaved*/) {
+      var addRoomPromises = [];
+      var addedRooms = [];
+
+      props.selectedRooms.value.forEach((selectedRoom) => {
+        //dla każdego pokoju
+        const selectedRoomServices = props.serviceForms.value.filter(
+          //wez services
+          (room) => {
+            return room.name == selectedRoom;
+          }
+        )[0].values;
+
+        addRoomPromises = [
+          ...addRoomPromises,
+          ...selectedRoomServices.map((e, index) => {
+            if (e.value)
+              return addRoom({
+                //i dodaj do bazki
+                variables: {
+                  Name: selectedRoom.toString(),
+                  questionnaire: null,
+                  category: e.categoryId,
+                  service: e.serviceId,
+                  value: parseFloat(
+                    e.value.slice(
+                      0,
+                      e.value.indexOf("m") >= 0
+                        ? e.value.indexOf("m")
+                        : e.value.length
+                    )
+                  ),
+                },
+              })
+                .then((val) => {
+                  addedRooms = [...addedRooms, val.data.createRoom.room.id];
+                  setListOfRooms([
+                    ...listOfRooms,
+                    {
+                      id: val.data.createRoom.room.id,
+                      name: val.data.createRoom.room.Name,
+                      service: val.data.createRoom.room.service.name,
+                      category: val.data.createRoom.room.service.category.title,
+                      value: val.data.createRoom.room.value,
+                    },
+                  ]);
+                  console.log(addedRooms);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+          }),
+        ];
+      });
+
+      var promise = new Promise((resolve, reject) => {
+        Promise.all(addRoomPromises).then(() => {
+          console.log(addedRooms);
+          console.log(resolve);
+
+          console.log(`
+            address: ${props.address.value || null},
+            email: ${props.email || null},
+            firstName: ${props.firstName || null},
+            flatArea:
+            ${
+              parseFloat(
+                props.flatArea?.value?.slice(
+                  0,
+                  props.flatArea?.value?.indexOf("m") >= 0
+                    ? props.flatArea?.value?.indexOf("m")
+                    : props.flatArea?.value?.length
+                )
+              ) || null
+            },
+            isHouse: ${props.isHouse.value || null},
+            phoneNumber: ${props.phoneNumber || null},
+            startDate: ${props.startDate.value || null},
+            rooms: ${addedRooms || []},            
+          `);
+
+          //zapisz kwestionariusz
+          addQuestionnaire({
+            //i dodaj do bazki
+            variables: {
+              address: props.address.value || null,
+              email: props.email || null,
+              firstName: props.firstName || null,
+              flatArea:
+                parseFloat(
+                  props.flatArea?.value?.slice(
+                    0,
+                    props.flatArea?.value?.indexOf("m") >= 0
+                      ? props.flatArea?.value?.indexOf("m")
+                      : props.flatArea?.value?.length
+                  )
+                ) || null,
+              isHouse: props.isHouse.value || null,
+              phoneNumber: props.phoneNumber || null,
+              startDate: props.startDate.value || null,
+              rooms: addedRooms || [],
+            },
+          })
+            .then((val) => {
+              var created = getDate(
+                new Date(val.data.createQuestionnaire.questionnaire.created_at)
+              );
+
+              console.log(
+                "Dodano kwestionariusz id " +
+                  val.data.createQuestionnaire.questionnaire.id +
+                  " wygenerowany dnia " +
+                  created
+              );
+              resolve({
+                createdDate: created,
+                valuationId: val.data.createQuestionnaire.questionnaire.id,
+              });
+            })
+            .catch((err) => {
+              alert(
+                "Nie udało się zapisać danych. Spróbuj ponownie za chwilę lub skontaktuj się z nami."
+              );
+              console.log(err);
+              reject(null);
+            });
+        });
+      });
+
+      return promise;
+    }
+  };
 
   return (
     <Layout heading="Prawie gotowe" selectedStep={3} backArrow={true}>
@@ -211,122 +363,60 @@ const ContactForm = (props) => {
             props.setEmail(e.target.value);
           }}
         />
-        <LinkButton
-          btn
+        <ExternalLinkButton
+          disabled={
+            !(props.selectedRooms.value && props.selectedRooms.value.length)
+          }
+          to={encodeURI(
+            `${BACKEND_URL}/generatePDF?valuationId=${valuationId}&documentDate=${createdDate}&name=${props.firstName}`
+          )}
+          target="_blank"
           onClick={() => {
-            var addRoomPromises = [];
-            var addedRooms = [];
-
-            props.selectedRooms.value.forEach((selectedRoom) => {
-              //dla każdego pokoju
-              const selectedRoomServices = props.serviceForms.value.filter(
-                //wez services
-                (room) => {
-                  return room.name == selectedRoom;
-                }
-              )[0].values;
-
-              addRoomPromises = [
-                ...addRoomPromises,
-                ...selectedRoomServices.map((e, index) => {
-                  if (e.value)
-                    return addRoom({
-                      //i dodaj do bazki
-                      variables: {
-                        Name: selectedRoom.toString(),
-                        questionnaire: null,
-                        category: e.categoryId,
-                        service: e.serviceId,
-                        value: parseFloat(
-                          e.value.slice(
-                            0,
-                            e.value.indexOf("m") >= 0
-                              ? e.value.indexOf("m")
-                              : e.value.length
-                          )
-                        ),
-                      },
-                    })
-                      .then((val) => {
-                        addedRooms = [
-                          ...addedRooms,
-                          val.data.createRoom.room.id,
-                        ];
-                        console.log(addedRooms);
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                }),
-              ];
-            });
-
-            Promise.all(addRoomPromises).then(() => {
-              console.log(addedRooms);
-
-              console.log(`
-              address: ${props.address.value || null},
-              email: ${props.email || null},
-              firstName: ${props.firstName || null},
-              flatArea:
-              ${
-                parseFloat(
-                  props.flatArea?.value?.slice(
-                    0,
-                    props.flatArea?.value?.indexOf("m") >= 0
-                      ? props.flatArea?.value?.indexOf("m")
-                      : props.flatArea?.value?.length
-                  )
-                ) || null
-              },
-              isHouse: ${props.isHouse.value || null},
-              phoneNumber: ${props.phoneNumber || null},
-              startDate: ${props.startDate.value || null},
-              rooms: ${addedRooms || []},
-                
-              `);
-
-              //zapisz kwestionariusz
-              addQuestionnaire({
-                //i dodaj do bazki
-
-                variables: {
-                  address: props.address.value || null,
-                  email: props.email || null,
-                  firstName: props.firstName || null,
-                  flatArea:
-                    parseFloat(
-                      props.flatArea?.value?.slice(
-                        0,
-                        props.flatArea?.value?.indexOf("m") >= 0
-                          ? props.flatArea?.value?.indexOf("m")
-                          : props.flatArea?.value?.length
-                      )
-                    ) || null,
-                  isHouse: props.isHouse.value || null,
-                  phoneNumber: props.phoneNumber || null,
-                  startDate: props.startDate.value || null,
-                  rooms: addedRooms || [],
-                },
-              })
-                .then((val) => {
-                  console.log(
-                    "Dodano kwestionariusz id " +
-                      val.data.createQuestionnaire.questionnaire.id
-                  );
-                })
-                .catch((err) => {
-                  alert(
-                    "Nie udało się zapisać danych. Spróbuj ponownie za chwilę lub skontaktuj się z nami."
-                  );
-                  console.log(err);
-                });
-            });
-            // console.log(data.service);
+            console.log(saveValuation());
           }}
           title="Pobierz wycenę"
+        ></ExternalLinkButton>
+
+        <LinkButton
+          disabled={
+            !(props.selectedRooms.value && props.selectedRooms.value.length)
+          }
+          btn
+          title="Zobacz wycenę"
+          onClick={async () => {
+            await saveValuation().then((val) => {
+              setValuationSaved(true);
+
+              console.log(val);
+              navigate(
+                `/valuation?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}`
+              );
+            });
+          }}
         ></LinkButton>
-        <LinkButton title="Wyślij wycenę na email"></LinkButton>
+
+        <LinkButton
+          btn
+          disabled={
+            !(props.selectedRooms.value && props.selectedRooms.value.length)
+          }
+          title="Wyślij wycenę na email"
+          onClick={() => {
+            saveValuation().then(() => {
+              // console.log({
+              //   valuationId: valuationId,
+              //   documentDate: createdDate,
+              //   name: props.firstName,
+              //   phone: props.phoneNumber,
+              //   email: props.email,
+              //   startDate: props.startDate.value,
+              //   isHouse: props.isHouse.value,
+              //   address: props.address.value,
+              //   rooms: listOfRooms,
+              // });
+            });
+          }}
+        ></LinkButton>
       </div>
     </Layout>
   );

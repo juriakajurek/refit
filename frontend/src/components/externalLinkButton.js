@@ -1,10 +1,13 @@
-import { Link } from "gatsby";
 import React from "react";
 import inputFieldStyles from "./inputField.module.scss";
 
-const LinkButton = (props) => {
+const ExternalLinkButton = (props) => {
   return (
-    <Link to={!props.btn ? props.to : "#"} className={inputFieldStyles.link}>
+    <a
+      href={!props.disabled ? props.to : null}
+      target={props.target}
+      className={inputFieldStyles.link}
+    >
       <div className={inputFieldStyles.inputContainer}>
         <button
           disabled={props.disabled ? true : false}
@@ -14,13 +17,13 @@ const LinkButton = (props) => {
           className={`${inputFieldStyles.input} ${inputFieldStyles.button} ${
             props.disabled ? inputFieldStyles.disable : ""
           }`}
-          onClick={props.onClick ? props.onClick : () => {}}
+          onClick={props.onClick}
         >
           {props.title}
         </button>
       </div>
-    </Link>
+    </a>
   );
 };
 
-export default LinkButton;
+export default ExternalLinkButton;

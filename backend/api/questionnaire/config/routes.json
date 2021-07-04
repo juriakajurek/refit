@@ -2,6 +2,15 @@
   "routes": [
     {
       "method": "GET",
+      "path": "/generatePDF",
+      "handler": "questionnaire.generatePDF",
+      "config": {
+        "policies": []
+      },
+      "responseType": "application/pdf"
+    },
+    {
+      "method": "GET",
       "path": "/questionnaires",
       "handler": "questionnaire.find",
       "config": {

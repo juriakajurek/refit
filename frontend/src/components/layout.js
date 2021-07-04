@@ -9,15 +9,19 @@ const Layout = (props) => {
   return (
     <div className={layoutStyles.container}>
       <div className={layoutStyles.content}>
-        <ProgressBar selectedStep={props.selectedStep} />
+        {!props.noProgressBar ? (
+          <ProgressBar selectedStep={props.selectedStep} />
+        ) : (
+          <div></div>
+        )}
         <Header
           heading={props.heading}
           backArrow={props.backArrow}
           selectedStep={props.selectedStep}
         />
         {props.children}
+        {!props.noFooter ? <Footer /> : <div></div>}
       </div>
-      {/* <Footer /> */}
     </div>
   );
 };
