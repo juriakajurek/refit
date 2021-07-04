@@ -24,6 +24,12 @@
     },
     "hint": {
       "type": "string"
+    },
+    "grossUnitPrice": {
+      "type": "decimal"
+    },
+    "netUnitPrice": {
+      "type": "decimal"
     }
   }
 }

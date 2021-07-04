@@ -6,120 +6,38 @@ import House from "../images/house.svg";
 import Calendar from "../images/calendar.svg";
 import valuationStyles from "../pages/valuation.module.scss";
 import Paragraph from "./paragraph";
-// import MeasuringContainer from "./measuringContainer";
+import ValuationLogo from "../images/valuationLogo.svg";
+import Phone from "../images/phone.svg";
+import Envelope from "../images/envelope.svg";
+import { Link } from "gatsby";
+import Web from "../images/web.svg";
+
+import { getDate } from "../utils/getDate";
 
 const ValuationSheet = (props) => {
-  // function getHeightOfElement(element) {
-  //   return element.getBoundingClientRect().height;
-  // }
-  // let height; // = container.clientHeight;
-  // let width; // = container.clientWidth;
+  const BACKEND_URL = process.env.GATSBY_BACKEND_URL;
 
-  // const measureElement = (element) => {
-  //   // let height; // = container.clientHeight;
-  //   // let width; // = container.clientWidth;
-  //   // Creates the hidden div appended to the document body
-  //   const container = document.createElement("div");
-  //   container.classList.add(valuationStyles.measureContainer);
-  //   container.id = "measureContainer";
-  //   document.body.appendChild(container);
+  console.log(props.valuationObject);
 
-  //   function delay(ms) {
-  //     ms += new Date().getTime();
-  //     while (new Date() < ms) {}
-  //   }
-  //   // Renders the React element into the hidden div
-  //   // ReactDOM.render(element, document.getElementById("measureContainer"));
-  //   ReactDOM.render(element, container, () => {});
+  var currName;
+  var roomsArray = [];
+  props.valuationObject.rooms.forEach((element) => {
+    if (currName == element.Name) return;
 
-  //   // function getHeight() {
-  //   //   const el = document.getElementById("measureContainer");
+    currName = element.Name;
+    console.log(element.Name);
+    roomsArray.push(
+      props.valuationObject.rooms.filter((r) => {
+        return r.Name == currName;
+      })
+    );
+  });
 
-  //   //   if (el.getBoundingClientRect().height) {
-  //   //     width = el.getBoundingClientRect().width;
-  //   //     height = el.getBoundingClientRect().height;
+  console.log(roomsArray);
 
-  //   //     return { height, width };
-  //   //   } else {
-  //   //     delay(300); // try again in 300 milliseconds
-  //   //     getHeight();
-  //   //   }
-  //   // }
+  var currGrossWorksCost = 0;
+  var currNetWorksCost = 0;
 
-  //   return { height, width };
-
-  //   // ReactDOM.render(element, document.getElementById("___gatsby"));
-  //   // ReactDOM.render([...Element.children], container);
-  //   // container.appendChild(element);
-
-  //   // document.getElementById("measureContainer").before(element);
-  //   // console.log(element());
-  //   // console.log(container);
-  //   // console.log(container.getBoundingClientRect().height);
-  //   // Gets the element size
-
-  //   // while (width == 0) width = container.clientWidth;
-  //   // while (height == 0) height = container.clientHeight;
-  //   // Removes the element and its wrapper from the document
-  //   // ReactDOM.unmountComponentAtNode(container);
-  //   // container.parentNode.removeChild(container);
-  // };
-
-  // const container = document.createElement("div");
-  // container.classList.add(valuationStyles.measureContainer);
-  // container.id = "measureContainer";
-  // document.body.appendChild(container);
-  // ReactDOM.render(element, container, () => {});
-
-  // const measureElement = (element, layerId = "measure-layer") => {
-  //   // const measureLayer = document.getElementById(layerId);
-  //   const container = document.createElement("div");
-  //   container.classList.add(valuationStyles.measureContainer);
-  //   container.id = "measureContainer";
-  //   document.body.appendChild(container);
-
-  //   ReactDOM.render(
-  //     <MeasuringContainer
-  //       children={element}
-  //       callback={(obj) => {
-  //         console.log(obj.h, obj.w);
-
-  //         var event = new CustomEvent("objectRendered", {
-  //           dimensions: {
-  //             height: obj.h,
-  //             width: obj.w,
-  //           },
-  //         });
-  //         console.log(Date.now());
-
-  //         document.dispatchEvent(event);
-  //       }}
-  //     />,
-  //     container
-  //   );
-
-  //   document.addEventListener("objectRendered", function (e) {
-  //     console.log(Date.now());
-  //     console.log(e.dimensions); // Prints "Example of an event"
-  //   });
-
-  //   // console.log(temp);
-  //   // console.log(temp());
-  //   // console.log(element);
-  //   // console.log(measureLayer);
-  //   // console.log(document.getElementById("measureContainer"));
-  //   // let h = document.getElementById("measureContainer").clientHeight;
-  //   // let w = document.getElementById("measureContainer").clientWidth;
-  //   // return { h, w };
-  //   ReactDOM.unmountComponentAtNode(container);
-  //   return;
-  // };
-
-  // useEffect(() => {
-  // let wynik = measureElement(temp());
-  // });
-  // console.log(Temp);
-  // return <Temp />;
   return (
     <div id="valuationContainer" className={valuationStyles.valuationContainer}>
       <div className={valuationStyles.pdf}>
@@ -130,8 +48,8 @@ const ValuationSheet = (props) => {
               <p>z dnia {props.valuationObject.documentDate}</p>
             </div>
             {/* ~questionnaire.createdAt  */}
-            <div className={valuationStyles.hr}></div>
             <div className={valuationStyles.infoCardContainer}>
+              <div className={valuationStyles.hr}></div>
               <div className={valuationStyles.infoCard}>
                 <div className={valuationStyles.icon}>
                   <img
@@ -156,8 +74,8 @@ const ValuationSheet = (props) => {
                 </div>
                 <div className={valuationStyles.infoCardContent}>
                   <h3>
-                    {props.valuationObject.isHouse ? "Dom" : "Mieszkanie"}
-                    {props.valuationObject.flatArea}
+                    {props.valuationObject.isHouse ? "Dom " : "Mieszkanie "}
+                    {props.valuationObject.flatArea} m²
                   </h3>
                   <p>{props.valuationObject.address}</p>
                 </div>
@@ -173,7 +91,9 @@ const ValuationSheet = (props) => {
                     ></img>
                   </div>
                   <div className={valuationStyles.infoCardContent}>
-                    <h3>{props.valuationObject.startDate}</h3>
+                    <h3>
+                      {getDate(new Date(props.valuationObject.startDate))}
+                    </h3>
                     <p>Preferowany termin rozpoczęcia prac</p>
                   </div>
                 </div>
@@ -181,107 +101,138 @@ const ValuationSheet = (props) => {
                 <div></div>
               )}
             </div>
-            <div className={valuationStyles.hr}></div>
           </div>
           {/* ------- */}
-          {props.valuationObject.rooms.forEach((room) => {
+          {roomsArray.map((room) => {
+            var gottenCategories = [];
+            var categoriesArray = [];
+            room.forEach((element) => {
+              if (gottenCategories.includes(element.category.title)) return;
+
+              gottenCategories.push(element.category.title);
+              console.log(element.category.title);
+              categoriesArray.push(
+                room.filter((r) => {
+                  console.log(r);
+                  return r.category.title == element.category.title;
+                })
+              );
+            });
+            console.log("categoriesArray");
+            console.log(categoriesArray); //
+
+            var currGrossRoomCost = 0;
+            var currNetRoomCost = 0;
+
             return (
-              <div className={valuationStyles.room}>
-                <h4 className={valuationStyles.roomHeader}>{room.Name}</h4>
-                <div className={`${valuationStyles.serviceCardHeader} `}>
-                  <img
-                    className={valuationStyles.serviceIcon}
-                    src={Calendar}
-                    alt="icon"
-                  ></img>
-                  <h5 black className={valuationStyles.serviceHeader}>
-                    {room.category.title}
-                  </h5>
-                </div>
-                <div className={valuationStyles.services}>
-                  <div className={`${valuationStyles.serviceContainer} `}>
-                    <div className={`${valuationStyles.description}`}>
-                      <h4 className={`${valuationStyles.serviceAmount} `}>
-                        6m2
-                      </h4>
-                      <div className={`${valuationStyles.textContainer}`}>
-                        <h5 black className={valuationStyles.serviceHeader}>
-                          {"Kafelkowanie podłóg"}
-                        </h5>{" "}
-                        <h5 className={valuationStyles.hint}>
-                          (format płytki od 30x30 do 90x90)
-                        </h5>
-                      </div>
-                    </div>
-                    <div className={`${valuationStyles.price}`}>
-                      <h5 black className={valuationStyles.priceHeader}>
-                        648 zł
-                      </h5>{" "}
-                      <h5 className={valuationStyles.hint}>600 zł nettoo</h5>
-                    </div>
-                  </div>
-                  <div className={`${valuationStyles.serviceContainer} `}>
-                    <div className={`${valuationStyles.description}`}>
-                      <h4 className={`${valuationStyles.serviceAmount} `}>
-                        12m2
-                      </h4>
-                      <div className={`${valuationStyles.textContainer}`}>
-                        <h5 black className={valuationStyles.serviceHeader}>
-                          {"Kafelkowanie ścian"}
-                        </h5>
-                        <h5 className={valuationStyles.hint}>
-                          (format płytki od 30x30 do 90x90)
-                        </h5>
-                      </div>
-                    </div>
+              <>
+                <div className={valuationStyles.hr}></div>
+                <div className={valuationStyles.room}>
+                  <h4 className={valuationStyles.roomHeader}>{room[0].Name}</h4>
 
-                    <div className={`${valuationStyles.price}`}>
-                      <h5 black className={valuationStyles.priceHeader}>
-                        1 555,20 zł
-                      </h5>{" "}
-                      <h5 className={valuationStyles.hint}>1 440 zł netto</h5>
-                    </div>
-                  </div>
-                  <div className={`${valuationStyles.serviceContainer} `}>
-                    <div className={`${valuationStyles.description}`}>
-                      <h4 className={`${valuationStyles.serviceAmount} `}>
-                        2m2
-                      </h4>
-                      <div className={`${valuationStyles.textContainer}`}>
-                        <h5 black className={valuationStyles.serviceHeader}>
-                          {"Kafelkowanie format specjalny"}
-                        </h5>{" "}
-                        <h5 className={valuationStyles.hint}>
-                          (format płytki od 30x30 do 90x90)
-                        </h5>
-                      </div>
-                    </div>
-                    <div className={`${valuationStyles.price}`}>
-                      <h5 black className={valuationStyles.priceHeader}>
-                        324 zł
-                      </h5>{" "}
-                      <h5 className={valuationStyles.hint}>300 zł netto</h5>
-                    </div>
-                  </div>
-                </div>
+                  {/* /dla każdej category/ */}
+                  {categoriesArray.map((ca) => {
+                    return (
+                      <>
+                        <div
+                          className={`${valuationStyles.serviceCardHeader} `}
+                        >
+                          <img
+                            className={valuationStyles.serviceIcon}
+                            src={BACKEND_URL + ca[0].category.icon[0].url}
+                            alt="icon"
+                          ></img>
+                          <h5 black className={valuationStyles.serviceHeader}>
+                            {ca[0].category.title}
+                          </h5>
+                        </div>
 
-                <div className={valuationStyles.summary}>
-                  <div className={`${valuationStyles.summaryDescription} `}>
-                    <h5 black className={valuationStyles.header}>
-                      Koszt całkowity wykończenia pomieszczenia
-                    </h5>
-                  </div>
-                  <div className={`${valuationStyles.summaryPrice}`}>
-                    <h5 black className={valuationStyles.priceHeader}>
-                      2 656,80 zł
-                    </h5>
-                    <h5 className={valuationStyles.hint}>2 460 zł netto</h5>
+                        <div className={valuationStyles.services}>
+                          {ca.map((service) => {
+                            console.log("service");
+                            console.log(service);
+
+                            currGrossRoomCost +=
+                              service.service.grossUnitPrice * service.value;
+
+                            currNetRoomCost +=
+                              service.service.netUnitPrice * service.value;
+
+                            currGrossWorksCost +=
+                              service.service.grossUnitPrice * service.value;
+
+                            currNetWorksCost +=
+                              service.service.netUnitPrice * service.value;
+
+                            return (
+                              <div
+                                className={`${valuationStyles.serviceContainer} `}
+                              >
+                                <div
+                                  className={`${valuationStyles.description}`}
+                                >
+                                  <h4
+                                    className={`${valuationStyles.serviceAmount} `}
+                                  >
+                                    {service.value}
+                                    {service.service.placeholder}
+                                  </h4>
+                                  <div
+                                    className={`${valuationStyles.textContainer}`}
+                                  >
+                                    <h5
+                                      black
+                                      className={valuationStyles.serviceHeader}
+                                    >
+                                      {service.service.name}
+                                    </h5>
+                                    <h5 className={valuationStyles.hint}>
+                                      {service.service.hint}
+                                    </h5>
+                                  </div>
+                                </div>
+                                <div className={`${valuationStyles.price}`}>
+                                  <h5
+                                    black
+                                    className={valuationStyles.priceHeader}
+                                  >
+                                    {service.service.grossUnitPrice *
+                                      service.value}
+                                    zł
+                                  </h5>
+                                  <h5 className={valuationStyles.hint}>
+                                    {service.service.netUnitPrice *
+                                      service.value}{" "}
+                                    zł netto
+                                  </h5>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    );
+                  })}
+
+                  <div className={valuationStyles.summary}>
+                    <div className={`${valuationStyles.summaryDescription} `}>
+                      <h5 black className={valuationStyles.header}>
+                        Koszt całkowity wykończenia pomieszczenia
+                      </h5>
+                    </div>
+                    <div className={`${valuationStyles.summaryPrice}`}>
+                      <h5 black className={valuationStyles.priceHeader}>
+                        {currGrossRoomCost} zł
+                      </h5>
+                      <h5 className={valuationStyles.hint}>
+                        {currNetRoomCost} netto
+                      </h5>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </>
             );
           })}
-
           <div className={valuationStyles.hr}></div>
           <div className={valuationStyles.servicesSummary}>
             <div className={`${valuationStyles.textContainer}`}>
@@ -295,189 +246,164 @@ const ValuationSheet = (props) => {
 
             <div className={`${valuationStyles.price}`}>
               <h5 black className={valuationStyles.priceHeader}>
-                5 961,60 zł
-              </h5>{" "}
-              <h5 className={valuationStyles.hint}>5 520 zł netto</h5>
+                {currGrossWorksCost} zł
+              </h5>
+              <h5 className={valuationStyles.hint}>
+                {currNetWorksCost} zł netto
+              </h5>
             </div>
           </div>
           <div className={valuationStyles.hr}></div>
-          {/* /////////////////////////////////////// */}
 
-          <div className={`${valuationStyles.materials}`}>
-            <h4 className={valuationStyles.materialsHeader}>
+          <div className={valuationStyles.materials}>
+            <h4 className={valuationStyles.roomHeader}>
               Materiały niezbędne do wykonania prac
             </h4>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
+
+            <div className={valuationStyles.services}>
+              <div className={`${valuationStyles.serviceContainer} `}>
+                <div className={`${valuationStyles.description}`}>
+                  <div className={`${valuationStyles.textContainer}`}>
+                    <h5 black className={valuationStyles.serviceHeader}>
+                      {"zaprawy, klej do płytek"}
+                    </h5>{" "}
+                  </div>
+                </div>
+                <div className={`${valuationStyles.price}`}>
+                  <h5 black className={valuationStyles.priceHeader}>
+                    184,50 zł
+                  </h5>{" "}
+                  <h5 className={valuationStyles.hint}>150 zł netto</h5>
+                </div>
               </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>{" "}
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>{" "}
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>{" "}
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
+              <div className={`${valuationStyles.serviceContainer} `}>
+                <div className={`${valuationStyles.description}`}>
+                  <div className={`${valuationStyles.textContainer}`}>
+                    <h5 black className={valuationStyles.serviceHeader}>
+                      gniazdko elektryczne
+                    </h5>{" "}
+                  </div>
+                </div>
+                <div className={`${valuationStyles.price}`}>
+                  <h5 black className={valuationStyles.priceHeader}>
+                    19,68 zł
+                  </h5>{" "}
+                  <h5 className={valuationStyles.hint}>16 zł netto</h5>
+                </div>
               </div>
             </div>
-            <div className={`${valuationStyles.materialContainer} `}>
+
+            <div className={valuationStyles.servicesSummary}>
+              <div className={valuationStyles.hr}></div>
+
               <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
+                <h4 className={valuationStyles.servicesSummaryHeader}>
+                  Koszt całkowity materiałów
+                </h4>
+                <h5 black className={valuationStyles.header}>
+                  Koszt całkowity materiałów Koszt całkowity wszystkich
+                  niezbędnych materiałów
                 </h5>
               </div>
+
               <div className={`${valuationStyles.price}`}>
                 <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
+                  6 654,72 zł
                 </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
+                <h5 className={valuationStyles.hint}>6 084 zł netto</h5>
               </div>
             </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>150 zł netto</h5>
-              </div>
-            </div>
-            <div className={`${valuationStyles.materialContainer} `}>
-              <div className={`${valuationStyles.textContainer}`}>
-                <h5 black className={valuationStyles.materialHeader}>
-                  zaprawy, klej do płytek
-                </h5>
-              </div>
-              <div className={`${valuationStyles.price}`}>
-                <h5 black className={valuationStyles.priceHeader}>
-                  184,50 zł
-                </h5>{" "}
-                <h5 className={valuationStyles.hint}>w chuj zł netto</h5>
-              </div>
-            </div>
-            {/* /////////////////////////////////////// */}
           </div>
+          <div className={valuationStyles.hr}></div>
+          <div className={valuationStyles.valuationSummary}>
+            <div className={`${valuationStyles.textContainer}`}>
+              <h4 className={valuationStyles.servicesSummaryHeader}>
+                Koszt całkowity + koszt materiałów
+              </h4>
+              <h5 black className={valuationStyles.header}>
+                Koszt całkowity wykończenia wszystkich pomieszczeń plus koszt
+                materiałów
+              </h5>
+            </div>
+
+            <div className={`${valuationStyles.price}`}>
+              <h5 black className={valuationStyles.priceHeader}>
+                6 654,72 zł
+              </h5>{" "}
+              <h5 className={valuationStyles.hint}>6 084 zł netto</h5>
+            </div>
+          </div>
+          <div className={valuationStyles.hr}></div>
+
+          <div className={valuationStyles.contactInfo}>
+            <div className={valuationStyles.data}>
+              <div className={valuationStyles.description}>
+                Dziękujemy za skorzystanie z naszego kalkulatora wycen, jeżeli
+                masz jakiekolwiek pytania, bądź jesteś zainteresowany współpracą
+                z nami czekamy na twój telefon lub email.
+              </div>
+
+              <div className={valuationStyles.contact}>
+                <div className={valuationStyles.contactLabel}>
+                  <img
+                    className={valuationStyles.icon}
+                    src={Phone}
+                    alt="numer telefonu"
+                  ></img>
+                  <div className={valuationStyles.textContainer}>
+                    889 000 302
+                  </div>
+                </div>{" "}
+                <div className={valuationStyles.contactLabel}>
+                  <img
+                    className={valuationStyles.icon}
+                    src={Phone}
+                    alt="numer telefonu"
+                  ></img>
+                  <div className={valuationStyles.textContainer}>
+                    889 000 602
+                  </div>
+                </div>{" "}
+                <div className={valuationStyles.contactLabel}>
+                  <img
+                    className={valuationStyles.icon}
+                    src={Envelope}
+                    alt="email"
+                  ></img>
+                  <div className={valuationStyles.textContainer}>
+                    kontakt@refit.pl
+                  </div>
+                </div>
+                <div className={valuationStyles.contactLabel}>
+                  <Link
+                    href="https://www.refit.pl"
+                    target="_blank"
+                    className={valuationStyles.link}
+                  >
+                    <img
+                      className={valuationStyles.icon}
+                      src={Web}
+                      alt="strona internetowa firmy"
+                    ></img>
+                    <div className={valuationStyles.textContainer}>
+                      www.refit.pl
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className={valuationStyles.logo}>
+              <img
+                className={valuationStyles.icon}
+                src={ValuationLogo}
+                alt="company logo"
+              ></img>
+            </div>
+          </div>
+          {/* <div className={valuationStyles.footer}>
+            <img className={valuationStyles.logo} src={Logo} alt="icon"></img>
+          </div> */}
         </div>
       </div>
     </div>

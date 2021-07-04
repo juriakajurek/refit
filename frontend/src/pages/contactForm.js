@@ -338,7 +338,6 @@ const ContactForm = (props) => {
             );
           }}
         />
-
         <Header heading="Informacje końcowe" />
         <Paragraph>Podaj nam resztę niezbędnych informacji</Paragraph>
         <br />
@@ -363,20 +362,6 @@ const ContactForm = (props) => {
             props.setEmail(e.target.value);
           }}
         />
-        <ExternalLinkButton
-          disabled={
-            !(props.selectedRooms.value && props.selectedRooms.value.length)
-          }
-          to={encodeURI(
-            `${BACKEND_URL}/generatePDF?valuationId=${valuationId}&documentDate=${createdDate}&name=${props.firstName}`
-          )}
-          target="_blank"
-          onClick={() => {
-            console.log(saveValuation());
-          }}
-          title="Pobierz wycenę"
-        ></ExternalLinkButton>
-
         <LinkButton
           disabled={
             !(props.selectedRooms.value && props.selectedRooms.value.length)
@@ -395,28 +380,42 @@ const ContactForm = (props) => {
           }}
         ></LinkButton>
 
-        <LinkButton
-          btn
+        <ExternalLinkButton
           disabled={
             !(props.selectedRooms.value && props.selectedRooms.value.length)
           }
-          title="Wyślij wycenę na email"
-          onClick={() => {
-            saveValuation().then(() => {
-              // console.log({
-              //   valuationId: valuationId,
-              //   documentDate: createdDate,
-              //   name: props.firstName,
-              //   phone: props.phoneNumber,
-              //   email: props.email,
-              //   startDate: props.startDate.value,
-              //   isHouse: props.isHouse.value,
-              //   address: props.address.value,
-              //   rooms: listOfRooms,
-              // });
+          btn
+          target="_blank"
+          onClick={async () => {
+            await saveValuation().then((val) => {
+              setValuationSaved(true);
+
+              console.log(val);
+              navigate(
+                `${BACKEND_URL}/generatePDF?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}`
+              );
             });
           }}
-        ></LinkButton>
+          title="Pobierz wycenę"
+        ></ExternalLinkButton>
+        <ExternalLinkButton
+          disabled={
+            !(props.selectedRooms.value && props.selectedRooms.value.length)
+          }
+          btn
+          target="_blank"
+          onClick={async () => {
+            await saveValuation().then((val) => {
+              setValuationSaved(true);
+
+              console.log(val);
+              window.open(
+                `${BACKEND_URL}/sendMail?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}&email=${props.email}`
+              );
+            });
+          }}
+          title="Wyślij wycenę na email"
+        ></ExternalLinkButton>
       </div>
     </Layout>
   );

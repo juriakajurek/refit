@@ -8,7 +8,7 @@ const ExternalLinkButton = (props) => {
       target={props.target}
       className={inputFieldStyles.link}
     >
-      <div className={inputFieldStyles.inputContainer}>
+      <div className={inputFieldStyles.inputContainer} style={props.style}>
         <button
           disabled={props.disabled ? true : false}
           id="submit-button"

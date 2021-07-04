@@ -11,6 +11,11 @@
     },
     {
       "method": "GET",
+      "path": "/sendMail",
+      "handler": "questionnaire.sendMail"
+    },
+    {
+      "method": "GET",
       "path": "/questionnaires",
       "handler": "questionnaire.find",
       "config": {

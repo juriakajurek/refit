@@ -9,6 +9,31 @@
   // z-index: -3;
 }
 
+.pdf {
+  width: calc(20.99cm - 7.8rem);
+  max-width: 100%;
+  height: auto;
+  min-height: 29.25cm; //A4
+  background-color: white;
+  align-self: center;
+  overflow: visible;
+  .footer {
+    height: 3.9rem;
+    width: 100%;
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    // margin-top: 5rem;
+
+    // position: relative;
+    // top: calc(29.25cm - 3.9rem);
+    .logo {
+    }
+  }
+}
+
 .valuationShadow {
   display: flex;
   flex-direction: column;
@@ -21,12 +46,27 @@
   padding: 3.9rem;
   position: relative;
   left: -3.9rem;
+  overflow: hidden;
+}
+
+.link {
+  font-family: "Red Hat Display", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  // line-height: 23.87px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  line-height: 1rem;
+  color: black;
 }
 
 .content {
   // margin: 3.9rem;
   margin-bottom: 0;
   // height: 981px;
+  overflow: visible;
   .header {
     width: 100%;
     display: flex;
@@ -35,7 +75,7 @@
       display: flex;
       flex-direction: row !important;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       h5 {
         margin-top: 0.75rem;
         margin-bottom: 0.75rem;
@@ -51,9 +91,10 @@
     }
   }
   .hr {
-    width: 100%;
+    width: 81%;
     height: 0.125rem;
     background-color: black;
+    position: absolute;
   }
   .infoCardContainer {
     display: flex;
@@ -201,6 +242,116 @@
       }
     }
   }
+
+  .materials {
+    display: flex;
+    flex-direction: column;
+    .roomHeader {
+      // font-size: 1rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .serviceCardHeader {
+      display: flex;
+      flex-direction: row;
+      align-self: flex-start;
+    }
+    .serviceIcon {
+      margin-right: 1rem;
+    }
+    .serviceContainer {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .description {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .textContainer {
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          margin: 1.3625rem;
+
+          .serviceHeader {
+            margin-top: 0;
+            margin-bottom: 0;
+
+            margin-block-start: 0;
+            margin-block-end: 0;
+            font-size: 0.75rem;
+          }
+          .hint {
+            margin-top: 0%;
+            margin-bottom: 0;
+
+            font-size: 0.625rem;
+            line-height: 0.75rem;
+            color: #888888;
+          }
+        }
+      }
+      .price {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: right;
+        .priceHeader {
+          margin-top: 0;
+          margin-bottom: 0;
+          font-size: 0.75rem;
+        }
+        .hint {
+          margin-top: 0%;
+          margin-bottom: 0;
+
+          font-size: 0.625rem;
+          line-height: 0.75rem;
+          color: #888888;
+        }
+      }
+    }
+    .services {
+      width: 95%;
+      align-self: flex-end;
+    }
+    .summary {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      .summaryDescription {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .header {
+          margin-top: 0;
+          margin-bottom: 0;
+          font-size: 0.75rem;
+        }
+      }
+      .summaryPrice {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: right;
+        .priceHeader {
+          margin-top: 0;
+          margin-bottom: 0;
+          font-size: 1rem;
+        }
+        .hint {
+          margin-top: 0%;
+          margin-bottom: 0;
+          // margin-right: 0;
+
+          font-size: 0.625rem;
+          line-height: 0.75rem;
+          color: #888888;
+        }
+      }
+    }
+  }
 }
 .servicesSummary {
   width: 100%;
@@ -209,11 +360,93 @@
   flex-direction: row;
   justify-content: space-between;
 
-  // margin-left: -5rem;
-  // padding-left: 5rem;
-  // padding-right: 5rem;
-  // margin-right: -5rem;
+  margin-left: -5rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  margin-right: -5rem;
   background-color: #f5f5f5;
+  // .background {
+  //   border: solid 1px red;
+  //   position: absolute;
+  //   width: 20.99cm;
+
+  //   height: 150%;
+  //   // z-index: -1;
+  // }
+  .servicesSummaryHeader {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .header {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 0.75rem;
+  }
+
+  .textContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 1.3625rem;
+    margin-left: 0;
+
+    .serviceHeader {
+      margin-top: 0;
+      margin-bottom: 0;
+
+      margin-block-start: 0;
+      margin-block-end: 0;
+      font-size: 0.75rem;
+    }
+    .hint {
+      margin-top: 0%;
+      margin-bottom: 0;
+
+      text-align: center;
+      font-size: 0.625rem;
+      line-height: 0.75rem;
+      color: #888888;
+    }
+  }
+
+  .price {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: right;
+    margin: 1rem;
+    margin-right: 0;
+
+    .priceHeader {
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 1rem;
+    }
+    .hint {
+      margin-top: 0%;
+      margin-bottom: 0;
+
+      font-size: 0.625rem;
+      line-height: 0.75rem;
+
+      color: #888888;
+    }
+  }
+}
+
+.valuationSummary {
+  width: 100%;
+  display: flex;
+  align-self: center;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-left: -5rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  margin-right: -5rem;
+  background-color: #d6d6d6;
   // .background {
   //   border: solid 1px red;
   //   position: absolute;
@@ -337,28 +570,63 @@
     }
   }
 }
-.pdf {
-  width: calc(20.99cm - 7.8rem);
-  max-width: 100%;
-  height: auto;
-  min-height: 29.25cm; //A4
-  background-color: white;
-  align-self: center;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  .footer {
-    height: 3.9rem;
-    width: 100%;
-    background-color: black;
+
+.contactInfo {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: space-between;
+  .data {
+    display: flex;
+    flex-direction: column;
+    .description {
+      font-family: "Red Hat Display", sans-serif;
+      font-weight: 400;
+      font-size: 0.625rem;
+      letter-spacing: 2%;
+
+      padding: 1.5rem;
+      width: 75%;
+    }
+    .contact {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      padding: 1.5rem;
+      padding-top: 0;
+      width: 75%;
+
+      justify-content: space-between;
+      align-items: center;
+
+      .contactLabel {
+        width: 45%;
+        min-width: 7rem;
+        display: flex;
+        flex-direction: row;
+        padding-top: 0.8rem;
+
+        .icon {
+          padding-right: 0.5rem;
+        }
+        .textContainer {
+          font-weight: 600;
+          font-size: 0.75rem;
+          letter-spacing: 2%;
+        }
+      }
+    }
+  }
+  .logo {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
-    // margin-top: 5rem;
-
-    position: relative;
-    top: calc(29.25cm - 3.9rem);
-    .logo {
+    align-items: center;
+    padding: 2.5rem;
+    .icon {
     }
   }
 }
