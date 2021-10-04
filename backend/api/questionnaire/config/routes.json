@@ -11,6 +11,11 @@
     },
     {
       "method": "GET",
+      "path": "/printPDF",
+      "handler": "questionnaire.printPDF"
+    },
+    {
+      "method": "GET",
       "path": "/sendMail",
       "handler": "questionnaire.sendMail"
     },

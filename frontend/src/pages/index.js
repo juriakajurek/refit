@@ -1,54 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "gatsby";
-import Layout from "../components/layout";
+import MainTile from "../components/mainTile";
+import indexStyles from "./index.module.scss";
 
-import { connect } from "react-redux";
+import homeBackgroundImage from "../images/home.jpg";
+import calcBackgroundImage from "../images/calc.jpg";
+import RefitLoader from "../components/refit-loader";
 
 const IndexPage = () => {
-  const Counter = ({ isHouse, setIsHouse }) => (
-    <div>
-      <button
-        onClick={() => {
-          setIsHouse(!isHouse);
-        }}
-      >
-        setIsHouse
-      </button>
-    </div>
-  );
+  const [isContentLoaded, setContentLoaded] = useState(false);
 
-  const mapStateToProps = ({ isHouse }) => {
-    return { isHouse };
-  };
-
-  const mapDispatchToProps = (dispatch) => {
-    return {
-      setIsHouse: (isHouse) => {
-        dispatch({ type: `SET_IS_HOUSE`, isHouse });
-      },
-    };
-  };
-  const ConnectedCounter = connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Counter);
+  useEffect(() => {
+    setContentLoaded(true);
+    console.log("content loaded");
+  }, []);
 
   return (
-    <Layout>
-      <ConnectedCounter />
-      <link rel="preconnect" href="https://fonts.gstatic.com" />
-
-      <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
-        rel="stylesheet"
-      />
-
-      <h1>Index page</h1>
-      <h3>Hello world!</h3>
-      <p>
-        Need a developer? <Link to="/contact">Contact me.</Link>
-      </p>
-    </Layout>
+    <div className={indexStyles.view}>
+      <img
+        style={{ display: "none" }}
+        src={`${homeBackgroundImage}`}
+        alt="home"
+      ></img>
+      <img
+        style={{ display: "none" }}
+        src={`${calcBackgroundImage}`}
+        alt="valuation calculating"
+      ></img>
+      <RefitLoader active={!isContentLoaded}></RefitLoader>
+      <div className={indexStyles.container}>
+        <a
+          href="https://www.facebook.com/refitWro/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <MainTile
+            title="Odwiedź profil na facebooku i zobacz nasze realizacje"
+            background={homeBackgroundImage}
+          />
+        </a>
+        <Link to={`#`}>
+          {/* /initialSurvey */}
+          <MainTile
+            disabled
+            title="Kalkulator wycen - już wkrótce!"
+            background={calcBackgroundImage}
+          />
+        </Link>
+      </div>
+    </div>
   );
 };
 

@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import Layout from "./layout";
+import React from "react";
 import RoomServicesStyles from "./roomServices.module.scss";
 import { graphql, useStaticQuery } from "gatsby";
-import RoomsForValuation from "./roomsForValuation";
 import Header from "./header";
 import Paragraph from "./paragraph";
 import ServiceCard from "./serviceCard";
@@ -19,6 +17,7 @@ const RoomServices = (props) => {
             services {
               hint
               placeholder
+              tooltip
               name
               id
             }
@@ -52,7 +51,7 @@ const RoomServices = (props) => {
       })}
     </div>
   ) : (
-    ""
+    <div></div>
   );
 };
 

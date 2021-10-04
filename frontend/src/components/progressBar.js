@@ -19,13 +19,13 @@ const ProgressBar = (props) => {
       </div>
       <Link
         className={`${progressBarStyles.dot} ${
-          props.selectedStep == 1 ? progressBarStyles.selected : ""
+          props.selectedStep === 1 ? progressBarStyles.selected : ""
         } ${props.selectedStep > 1 ? progressBarStyles.past : ""}`}
         to="/initialSurvey"
       >
         <p
           className={`${progressBarStyles.dotNumber} ${
-            props.selectedStep == 1 ? progressBarStyles.selected : ""
+            props.selectedStep === 1 ? progressBarStyles.selected : ""
           } ${props.selectedStep > 1 ? progressBarStyles.past : ""}`}
         >
           1
@@ -33,13 +33,13 @@ const ProgressBar = (props) => {
       </Link>
       <Link
         className={`${progressBarStyles.dot} ${
-          props.selectedStep == 2 ? progressBarStyles.selected : ""
+          props.selectedStep === 2 ? progressBarStyles.selected : ""
         } ${props.selectedStep > 2 ? progressBarStyles.past : ""}`}
         to="/servicesChoice"
       >
         <p
           className={`${progressBarStyles.dotNumber} ${
-            props.selectedStep == 2 ? progressBarStyles.selected : ""
+            props.selectedStep === 2 ? progressBarStyles.selected : ""
           } ${props.selectedStep > 2 ? progressBarStyles.past : ""}`}
         >
           2
@@ -47,13 +47,13 @@ const ProgressBar = (props) => {
       </Link>
       <Link
         className={`${progressBarStyles.dot} ${
-          props.selectedStep == 3 ? progressBarStyles.selected : ""
+          props.selectedStep === 3 ? progressBarStyles.selected : ""
         }`}
         to="/contactForm"
       >
         <p
           className={`${progressBarStyles.dotNumber} ${
-            props.selectedStep == 3 ? progressBarStyles.selected : ""
+            props.selectedStep === 3 ? progressBarStyles.selected : ""
           }`}
         >
           3

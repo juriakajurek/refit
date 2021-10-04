@@ -20,21 +20,28 @@ const RoomsForValuation = (props) => {
           ? props.selectedRooms.value.map((el) => {
               return (
                 <li key={el} style={{ listStyleType: "none" }}>
-                  <div className={roomsForValuationStyles.roomLabel}>
+                  <div
+                    className={roomsForValuationStyles.roomLabel}
+                    onClick={(e) =>
+                      props.onClick ? props.onClick(e) : () => {}
+                    }
+                    onKeyDown={(e) =>
+                      props.onClick ? props.onClick(e) : () => {}
+                    }
+                    role="button"
+                    tabIndex="0"
+                  >
                     <p className={roomsForValuationStyles.paragraph}>{el}</p>
                     <img
                       className={roomsForValuationStyles.icon}
                       src={
-                        props.icon == "x"
+                        props.icon === "x"
                           ? X
-                          : props.icon == "list"
+                          : props.icon === "list"
                           ? List
-                          : props.icon == "tick"
+                          : props.icon === "tick"
                           ? Tick
                           : ""
-                      }
-                      onClick={(e) =>
-                        props.onClick ? props.onClick(e) : () => {}
                       }
                       alt="icon"
                     ></img>

@@ -3,8 +3,6 @@ import formStyles from "./form.module.scss";
 import inputFieldStyles from "./inputField.module.scss";
 import PlacesAutocomplete from "react-places-autocomplete";
 
-/*global google*/
-
 const PlaceInput = (props) => {
   const handlePlaceChange = (address) => {
     props.setAddress({ name: "address", value: address });

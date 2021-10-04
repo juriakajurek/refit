@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "questionnaires",
+  "info": {
+    "name": "questionnaire",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "isHouse": {
+      "type": "boolean"
+    },
+    "flatArea": {
+      "type": "decimal"
+    },
+    "address": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string"
+    },
+    "rooms": {
+      "collection": "room",
+      "via": "questionnaire"
+    },
+    "email": {
+      "type": "email"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "biginteger"
+    }
+  }
+}

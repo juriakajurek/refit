@@ -1,22 +1,38 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/layout";
 import servicesChoiceStyles from "./servicesChoice.module.scss";
-import { graphql, useStaticQuery, navigate } from "gatsby";
+import { navigate } from "gatsby";
 import RoomsForValuation from "../components/roomsForValuation";
 import { connect } from "react-redux";
 import RoomServices from "../components/roomServices";
+import RoundLoader from "../components/round-loader";
 import LinkButton from "../components/linkButton";
 
 const ServicesChoice = () => {
+  const [isFormCompleted, setFormCompleted] = useState(false);
+  const [showedRoom, setShowedRoom] = useState("");
+  const [isContentLoaded, setContentLoaded] = useState(false);
+
+  useEffect(() => {
+    setContentLoaded(true);
+    console.log("initialSurvey content loaded");
+  }, []);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
+    const checkForm = () => {
+      if (showedRoom) return true;
+    };
+
     if (urlParams.get("showedRoom")) {
       setShowedRoom(urlParams.get("showedRoom"));
       navigate(`/servicesChoice`);
     }
-  });
+    if (checkForm()) {
+      setFormCompleted(true);
+    }
+  }, [showedRoom]);
 
-  const [showedRoom, setShowedRoom] = useState("");
   const mapStateToProps = ({
     // isHouse,
     // address,
@@ -63,54 +79,41 @@ const ServicesChoice = () => {
     mapDispatchToProps
   )(RoomServices);
 
-  // const rooms = getRooms.allStrapiDefaultRooms.edges;
-
-  // const rooms = getRooms.allStrapiRooms.edges;
   const showTarget = (e) => {
-    if (showedRoom == e.target.parentNode.children[0].innerHTML) {
+    var targetName = e.target.parentNode.querySelector("p").innerText;
+    console.log(targetName);
+    if (showedRoom === targetName.toString()) {
       setShowedRoom(null);
     } else {
-      // const json = {
-      //   wycena: {
-      //     id,
-      //     pokoje: [
-      //       {
-      //         id,
-      //         nazwa,
-      //         kategorie: [
-      //           {
-      //             id,
-      //             uslugi: [
-      //               {
-      //                 id,
-      //                 nazwa,
-      //                 wartosc,
-      //               },
-      //             ],
-      //           },
-      //           {
-      //             id,
-      //             usluga,
-      //           },
-      //         ],
-      //       },
-      //       {},
-      //     ],
-      //   },
-      // };
-
-      setShowedRoom(e.target.parentNode.children[0].innerHTML);
+      setShowedRoom(targetName.toString());
     }
   };
+
   return (
-    <Layout heading="Wycena" selectedStep={2} backArrow={true}>
-      <div className={servicesChoiceStyles.servicesChoice}>
-        <ConnectedRoomsForValuation icon="list" onClick={showTarget} />
-        <ConnectedRoomServices showedRoom={showedRoom} />
-        <LinkButton title="Dalej" to="/contactForm" />
-      </div>
-      {/* <Form /> */}
-    </Layout>
+    <>
+      <RoundLoader active={!isContentLoaded}></RoundLoader>
+
+      <Layout heading="Wycena" selectedStep={2} backArrow={true}>
+        <div className={servicesChoiceStyles.servicesChoice}>
+          <ConnectedRoomsForValuation icon="list" onClick={showTarget} />
+          <ConnectedRoomServices showedRoom={showedRoom} />
+          {isFormCompleted ? (
+            <LinkButton title="Dalej" to="/contactForm" />
+          ) : (
+            <>
+              <LinkButton title="Dalej" to="/contactForm" disabled />
+              <p
+                className={`${servicesChoiceStyles.question} ${servicesChoiceStyles.hint}`}
+              >
+                Aby przejść dalej wybierz prace, które mamy wykonać w
+                poszczególnych pomieszczeniach
+              </p>
+            </>
+          )}
+        </div>
+        {/* <Form /> */}
+      </Layout>
+    </>
   );
 };
 

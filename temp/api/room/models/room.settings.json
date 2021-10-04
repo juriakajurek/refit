@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rooms",
+  "info": {
+    "name": "Room",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "questionnaire": {
+      "via": "rooms",
+      "model": "questionnaire"
+    },
+    "category": {
+      "model": "category"
+    },
+    "service": {
+      "model": "service"
+    },
+    "value": {
+      "type": "decimal"
+    }
+  }
+}

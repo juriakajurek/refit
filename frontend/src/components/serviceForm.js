@@ -2,10 +2,11 @@ import React from "react";
 import ServiceFormStyles from "./serviceForm.module.scss";
 import Paragraph from "./paragraph";
 import InputField from "./inputField";
+import Question from "../images/question.svg";
 
 const ServiceForm = (props) => {
   var curr = props.serviceForms.value.filter((el) => {
-    return el.name == props.showedRoom;
+    return el.name === props.showedRoom;
   });
 
   // console.log(curr);
@@ -30,7 +31,7 @@ const ServiceForm = (props) => {
             serviceId: props.serviceId,
           };
           var myVals = props.serviceForms.value.filter((el) => {
-            if (el.name == props.showedRoom) {
+            if (el.name === props.showedRoom) {
               return { name: el.name, values: curr };
             } else {
               return el;
@@ -45,6 +46,9 @@ const ServiceForm = (props) => {
         horizontalFlat
         white
         placeholder={props.placeholder}
+        withIcon={props?.tooltip?.length > 0 ? true : false}
+        iconSource={Question}
+        tooltip={props.tooltip}
         manageArea={
           props.placeholder
             ? props.placeholder.toString().indexOf("m²") >= 0
@@ -59,7 +63,7 @@ const ServiceForm = (props) => {
             serviceId: curr[0]?.values[props.id]?.serviceId,
           };
           var myVals = props.serviceForms.value.filter((el) => {
-            if (el.name == props.showedRoom) {
+            if (el.name === props.showedRoom) {
               return { name: el.name, values: curr };
             } else {
               return el;

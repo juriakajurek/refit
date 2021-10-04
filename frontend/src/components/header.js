@@ -1,6 +1,5 @@
 import React from "react";
 import headerStyles from "./header.module.scss";
-import ProgressBar from "./progressBar";
 import leftArrow from "../images/leftArrow.svg";
 import { Link } from "gatsby";
 
@@ -28,10 +27,12 @@ const Header = (props) => {
             ></img>
           </Link>
         ) : (
-          ""
+          <div></div>
         )}
 
-        <p className={headerStyles.title}>{props.heading}</p>
+        <p className={headerStyles.title} style={props.style}>
+          {props.heading}
+        </p>
       </div>
     </header>
   );

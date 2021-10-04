@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { graphql, useStaticQuery } from "gatsby";
 //import { Link } from "gatsby";
 import Layout from "../components/layout";
 import Form from "../components/form";
+import RoundLoader from "../components/round-loader";
 import { connect } from "react-redux";
 
 const InitialSurvey = () => {
+  const [isContentLoaded, setContentLoaded] = useState(false);
+
+  useEffect(() => {
+    setContentLoaded(true);
+    console.log("initialSurvey content loaded");
+  }, []);
+
   const getDefaultRooms = useStaticQuery(graphql`
     {
       allStrapiDefaultRooms {
@@ -63,12 +71,15 @@ const InitialSurvey = () => {
   const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(Form);
 
   return (
+    // <>
+    // <RoundLoader active={!isContentLoaded}></RoundLoader>
     <Layout
       heading="Do wyceny potrzebujemy kilka informacji na temat twojej inwestycji."
       selectedStep={1}
     >
       <ConnectedForm rooms={rooms} />
     </Layout>
+    // </>
   );
 };
 

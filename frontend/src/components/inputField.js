@@ -1,7 +1,7 @@
 import React from "react";
 import inputFieldStyles from "./inputField.module.scss";
-import roomLabelStyles from "./roomLabel.module.scss";
 import Plus from "../images/plus.svg";
+import ReactTooltip from "react-tooltip";
 
 const manageArea = (value) => {
   if (
@@ -26,7 +26,7 @@ const manageArea = (value) => {
     return curr.toString();
   } else if (
     value &&
-    value.length == 1 && //jesli jest tylko jeden znak
+    value.length === 1 && //jesli jest tylko jeden znak
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].includes(
       parseInt(
         value[
@@ -54,14 +54,10 @@ const InputField = (props) => {
         onBlur={
           props.manageArea
             ? (i) => {
-                console.log("manageArea");
-                console.log(i.currentTarget.value);
-
                 i.currentTarget.value = manageArea(
                   i.currentTarget.value.toString()
                 );
                 props.setArea(i.currentTarget.value.toString());
-                console.log(i.currentTarget.value);
               }
             : () => {}
         }
@@ -69,18 +65,28 @@ const InputField = (props) => {
         value={props.value || ""}
       />
       {props.withIcon ? (
-        <div className={inputFieldStyles.iconContainer}>
+        <div
+          className={inputFieldStyles.iconContainer}
+          onClick={props.onClick}
+          onKeyDown={props.onClick}
+          role="button"
+          tabIndex="0"
+        >
           <img
             className={inputFieldStyles.icon}
-            src={Plus}
-            onClick={props.onClick}
+            src={props.iconSource ? props.iconSource : Plus}
             alt="icon"
+            data-tip={props.tooltip}
           ></img>
+          <ReactTooltip
+            place="left"
+            effect="solid"
+            className={inputFieldStyles.tooltip}
+          />
         </div>
       ) : (
         <div />
       )}
-      {/* </div> */}
     </div>
   );
 };

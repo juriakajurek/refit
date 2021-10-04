@@ -3,19 +3,22 @@
   flex-direction: column;
   align-self: center;
 
-  padding: 0.5rem 1rem 1rem 1rem;
-  margin: 0.25rem 0;
+  padding: 0rem 1rem 1rem 1rem;
+  margin-bottom: 0.75rem;
   width: 90%;
   border-radius: 20px;
-  transition: background-color 0.8s ease;
+  transition: background-color 0.4s ease;
   &.expanded {
-    transition: background-color 0.8s ease;
+    transition: background-color 0.4s ease;
     background-color: #f0f0f0;
   }
   .serviceCardHeader {
     display: flex;
     flex-direction: row;
     align-self: flex-start;
+
+    border: none !important;
+    outline: none !important;
   }
 
   .serviceCardBody {
@@ -23,12 +26,12 @@
     flex-direction: column;
 
     // transition-delay: 1s;
-    transition: max-height 0.8s;
+    transition: max-height 0.4s;
     max-height: 0;
     overflow: hidden;
     &.expanded {
       // transition-delay: 1s;
-      transition: max-height 2s;
+      transition: max-height 1s;
       max-height: 5000px;
     }
   }

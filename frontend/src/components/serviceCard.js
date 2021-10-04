@@ -1,28 +1,15 @@
 import React, { useState } from "react";
-import Layout from "./layout";
 import ServiceCardStyles from "./serviceCard.module.scss";
 import { connect } from "react-redux";
-import { graphql, useStaticQuery } from "gatsby";
-import RoomsForValuation from "./roomsForValuation";
-import Header from "./header";
 import Paragraph from "./paragraph";
 import Plus from "../images/plus.svg";
-import TilingWorks from "../images/works/tilingWorks.svg";
 import ServiceForm from "./serviceForm";
 
 const ServiceCard = (props) => {
   const BACKEND_URL = process.env.GATSBY_BACKEND_URL;
   const [expanded, setExpanded] = useState(false);
-  const mapStateToProps = ({
-    // isHouse,
-    // address,
-    // startDate,
-    // flatArea,
-    selectedRooms,
-    serviceForms,
-  }) => {
+  const mapStateToProps = ({ selectedRooms, serviceForms }) => {
     return {
-      //  isHouse, address, startDate, flatArea,
       selectedRooms,
       serviceForms,
     };
@@ -54,8 +41,6 @@ const ServiceCard = (props) => {
     mapStateToProps,
     mapDispatchToProps
   )(ServiceForm);
-  // console.log("category!!!");
-  // console.log(props.element);
   return (
     <div
       className={`${ServiceCardStyles.serviceCard} ${
@@ -67,6 +52,11 @@ const ServiceCard = (props) => {
         onClick={() => {
           setExpanded(!expanded);
         }}
+        onKeyDown={() => {
+          setExpanded(!expanded);
+        }}
+        role="button"
+        tabIndex="0"
       >
         <img
           className={`${ServiceCardStyles.plusIcon} ${
@@ -95,6 +85,7 @@ const ServiceCard = (props) => {
               name={el.name}
               hint={el.hint}
               placeholder={el.placeholder}
+              tooltip={el.tooltip}
               showedRoom={props.showedRoom}
               categoryId={props.element.strapiId}
               serviceId={el.id}

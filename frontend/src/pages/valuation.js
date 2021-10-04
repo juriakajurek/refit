@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { Link } from "react";
 import Layout from "../components/layout";
-import Person from "../images/person.svg";
-import Logo from "../images/logo.svg";
-import House from "../images/house.svg";
-import Calendar from "../images/calendar.svg";
 import valuationStyles from "./valuation.module.scss";
 import Paragraph from "../components/paragraph";
 import ValuationSheet from "../components/valuationSheet";
@@ -32,6 +28,9 @@ const GET_QUESTIONNAIRE = gql`
           placeholder
           grossUnitPrice
           netUnitPrice
+          materialGrossUnitPrice
+          materialNetUnitPrice
+          materialName
         }
         category {
           title
@@ -49,10 +48,12 @@ const GET_QUESTIONNAIRE = gql`
 const Valuation = () => {
   const BACKEND_URL = process.env.GATSBY_BACKEND_URL;
 
-  const url = new URL(window.location.href);
+  const url =
+    typeof window !== "undefined" ? new URL(window.location.href) : {};
   const params = new URLSearchParams(url.search);
   const valuationOnlyMode = params.get("valuationonly");
   const emailMode = params.get("emailmode");
+  const printMode = params.get("printmode");
   const valuationId = params.get("valuationId");
   const documentDate = params.get("documentDate");
   const name = params.get("name");
@@ -66,8 +67,8 @@ const Valuation = () => {
 
   if (
     //czy podane imie i data wyceny zgodna z tym co na bazie; jesli nie to nie pokazuj wyceny
-    data.questionnaire.firstName != name ||
-    getDate(new Date(data.questionnaire.created_at)) != documentDate
+    data.questionnaire.firstName !== name ||
+    getDate(new Date(data.questionnaire.created_at)) !== documentDate
   ) {
     return (
       <div>
@@ -116,10 +117,8 @@ const Valuation = () => {
           <ValuationSheet valuationObject={valuationObject} />
         </div>
         <ExternalLinkButton
-          style={{ margin: "2rem" }}
+          style={{ margin: "2rem", marginBottom: "1rem" }}
           btn
-          alone
-          target="_blank"
           onClick={() => {
             window.open(
               `${BACKEND_URL}/generatePDF?valuationId=${valuationObject.valuationId}&documentDate=${valuationObject.documentDate}&name=${valuationObject.name}`
@@ -127,8 +126,21 @@ const Valuation = () => {
           }}
           title="Pobierz wycenę"
         ></ExternalLinkButton>
+        <ExternalLinkButton
+          style={{ margin: "2rem", marginTop: "0" }}
+          btn
+          target="_blank"
+          onClick={() => {
+            window.open(
+              `${BACKEND_URL}/printPDF?valuationId=${valuationObject.valuationId}&documentDate=${valuationObject.documentDate}&name=${valuationObject.name}`
+            );
+          }}
+          title="Pobierz wersję do druku"
+        ></ExternalLinkButton>
       </Layout>
     );
+  } else if (printMode) {
+    return <ValuationSheet noMargins valuationObject={valuationObject} />;
   } else {
     return (
       <div>

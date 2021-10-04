@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import Person from "../images/person.svg";
-import Logo from "../images/logo.svg";
 import House from "../images/house.svg";
 import Calendar from "../images/calendar.svg";
 import valuationStyles from "../pages/valuation.module.scss";
-import Paragraph from "./paragraph";
 import ValuationLogo from "../images/valuationLogo.svg";
 import Phone from "../images/phone.svg";
 import Envelope from "../images/envelope.svg";
@@ -22,24 +19,36 @@ const ValuationSheet = (props) => {
   var currName;
   var roomsArray = [];
   props.valuationObject.rooms.forEach((element) => {
-    if (currName == element.Name) return;
+    if (currName === element.Name) return;
 
     currName = element.Name;
     console.log(element.Name);
     roomsArray.push(
       props.valuationObject.rooms.filter((r) => {
-        return r.Name == currName;
+        return r.Name === currName;
       })
     );
   });
+
+  function currencyFormat(num) {
+    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+  }
 
   console.log(roomsArray);
 
   var currGrossWorksCost = 0;
   var currNetWorksCost = 0;
 
+  var currGrossMaterialsCost = 0;
+  var currNetMaterialsCost = 0;
+
   return (
-    <div id="valuationContainer" className={valuationStyles.valuationContainer}>
+    <div
+      id="valuationContainer"
+      className={`${valuationStyles.valuationContainer} ${
+        props.noMargins ? valuationStyles.noMargins : ""
+      }`}
+    >
       <div className={valuationStyles.pdf}>
         <div id="valuationContent" className={valuationStyles.content}>
           <div className={valuationStyles.header}>
@@ -48,8 +57,10 @@ const ValuationSheet = (props) => {
               <p>z dnia {props.valuationObject.documentDate}</p>
             </div>
             {/* ~questionnaire.createdAt  */}
-            <div className={valuationStyles.infoCardContainer}>
+            <div>
               <div className={valuationStyles.hr}></div>
+            </div>
+            <div className={valuationStyles.infoCardContainer}>
               <div className={valuationStyles.infoCard}>
                 <div className={valuationStyles.icon}>
                   <img
@@ -114,7 +125,7 @@ const ValuationSheet = (props) => {
               categoriesArray.push(
                 room.filter((r) => {
                   console.log(r);
-                  return r.category.title == element.category.title;
+                  return r.category.title === element.category.title;
                 })
               );
             });
@@ -133,7 +144,7 @@ const ValuationSheet = (props) => {
                   {/* /dla każdej category/ */}
                   {categoriesArray.map((ca) => {
                     return (
-                      <>
+                      <div className={`${valuationStyles.roomService} `}>
                         <div
                           className={`${valuationStyles.serviceCardHeader} `}
                         >
@@ -196,13 +207,17 @@ const ValuationSheet = (props) => {
                                     black
                                     className={valuationStyles.priceHeader}
                                   >
-                                    {service.service.grossUnitPrice *
-                                      service.value}
+                                    {currencyFormat(
+                                      service.service.grossUnitPrice *
+                                        service.value
+                                    )}
                                     zł
                                   </h5>
                                   <h5 className={valuationStyles.hint}>
-                                    {service.service.netUnitPrice *
-                                      service.value}{" "}
+                                    {currencyFormat(
+                                      service.service.netUnitPrice *
+                                        service.value
+                                    )}{" "}
                                     zł netto
                                   </h5>
                                 </div>
@@ -210,7 +225,7 @@ const ValuationSheet = (props) => {
                             );
                           })}
                         </div>
-                      </>
+                      </div>
                     );
                   })}
 
@@ -222,10 +237,10 @@ const ValuationSheet = (props) => {
                     </div>
                     <div className={`${valuationStyles.summaryPrice}`}>
                       <h5 black className={valuationStyles.priceHeader}>
-                        {currGrossRoomCost} zł
+                        {currencyFormat(currGrossRoomCost)} zł
                       </h5>
                       <h5 className={valuationStyles.hint}>
-                        {currNetRoomCost} netto
+                        {currencyFormat(currNetRoomCost)} zł netto
                       </h5>
                     </div>
                   </div>
@@ -246,78 +261,141 @@ const ValuationSheet = (props) => {
 
             <div className={`${valuationStyles.price}`}>
               <h5 black className={valuationStyles.priceHeader}>
-                {currGrossWorksCost} zł
+                {currencyFormat(currGrossWorksCost)} zł
               </h5>
               <h5 className={valuationStyles.hint}>
-                {currNetWorksCost} zł netto
+                {currencyFormat(currNetWorksCost)} zł netto
               </h5>
             </div>
           </div>
           <div className={valuationStyles.hr}></div>
 
           <div className={valuationStyles.materials}>
-            <h4 className={valuationStyles.roomHeader}>
+            <h4 className={valuationStyles.materialsHeader}>
               Materiały niezbędne do wykonania prac
             </h4>
 
-            <div className={valuationStyles.services}>
-              <div className={`${valuationStyles.serviceContainer} `}>
-                <div className={`${valuationStyles.description}`}>
-                  <div className={`${valuationStyles.textContainer}`}>
-                    <h5 black className={valuationStyles.serviceHeader}>
-                      {"zaprawy, klej do płytek"}
-                    </h5>{" "}
-                  </div>
-                </div>
-                <div className={`${valuationStyles.price}`}>
-                  <h5 black className={valuationStyles.priceHeader}>
-                    184,50 zł
-                  </h5>{" "}
-                  <h5 className={valuationStyles.hint}>150 zł netto</h5>
-                </div>
-              </div>
-              <div className={`${valuationStyles.serviceContainer} `}>
-                <div className={`${valuationStyles.description}`}>
-                  <div className={`${valuationStyles.textContainer}`}>
-                    <h5 black className={valuationStyles.serviceHeader}>
-                      gniazdko elektryczne
-                    </h5>{" "}
-                  </div>
-                </div>
-                <div className={`${valuationStyles.price}`}>
-                  <h5 black className={valuationStyles.priceHeader}>
-                    19,68 zł
-                  </h5>{" "}
-                  <h5 className={valuationStyles.hint}>16 zł netto</h5>
-                </div>
-              </div>
-            </div>
+            {roomsArray.map((room) => {
+              var gottenCategories = [];
+              var categoriesArray = [];
+              room.forEach((element) => {
+                if (gottenCategories.includes(element.category.title)) return;
 
-            <div className={valuationStyles.servicesSummary}>
-              <div className={valuationStyles.hr}></div>
+                gottenCategories.push(element.category.title);
+                console.log(element.category.title);
+                categoriesArray.push(
+                  room.filter((r) => {
+                    console.log(r);
+                    return r.category.title === element.category.title;
+                  })
+                );
+              });
 
+              return (
+                <>
+                  {categoriesArray.map((ca) => {
+                    return (
+                      <>
+                        <div className={valuationStyles.materialsList}>
+                          {ca.map((service) => {
+                            console.log("service");
+                            console.log(service);
+
+                            currGrossMaterialsCost +=
+                              service.service.materialGrossUnitPrice *
+                              service.value;
+
+                            currNetMaterialsCost +=
+                              service.service.materialNetUnitPrice *
+                              service.value;
+
+                            return (
+                              <>
+                                {service.service.materialGrossUnitPrice > 0 ? (
+                                  <div
+                                    className={`${valuationStyles.materialContainer} `}
+                                  >
+                                    <div
+                                      className={`${valuationStyles.description}`}
+                                    >
+                                      <div
+                                        className={`${valuationStyles.textContainer}`}
+                                      >
+                                        <h5
+                                          black
+                                          className={
+                                            valuationStyles.materialHeader
+                                          }
+                                        >
+                                          {service.service.materialName}
+                                        </h5>
+                                        <h5 className={valuationStyles.hint}>
+                                          {service.service.name}
+                                          {service.Name}
+                                        </h5>
+                                      </div>
+                                    </div>
+
+                                    <div className={`${valuationStyles.price}`}>
+                                      <h5
+                                        black
+                                        className={valuationStyles.priceHeader}
+                                      >
+                                        {currencyFormat(
+                                          service.service
+                                            .materialGrossUnitPrice *
+                                            service.value
+                                        )}
+                                        zł
+                                      </h5>
+                                      <h5 className={valuationStyles.hint}>
+                                        {currencyFormat(
+                                          service.service.materialNetUnitPrice *
+                                            service.value
+                                        )}
+                                        zł netto
+                                      </h5>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div></div>
+                                )}
+                              </>
+                            );
+                          })}
+                        </div>
+                      </>
+                    );
+                  })}
+                </>
+              );
+            })}
+
+            <div className={valuationStyles.hr}></div>
+            <div className={valuationStyles.materialsSummary}>
               <div className={`${valuationStyles.textContainer}`}>
-                <h4 className={valuationStyles.servicesSummaryHeader}>
+                <h4 className={valuationStyles.materialsSummaryHeader}>
                   Koszt całkowity materiałów
                 </h4>
                 <h5 black className={valuationStyles.header}>
-                  Koszt całkowity materiałów Koszt całkowity wszystkich
-                  niezbędnych materiałów
+                  Koszt całkowity wszystkich niezbędnych materiałów
                 </h5>
               </div>
 
               <div className={`${valuationStyles.price}`}>
                 <h5 black className={valuationStyles.priceHeader}>
-                  6 654,72 zł
+                  {currencyFormat(currGrossMaterialsCost)} zł
                 </h5>{" "}
-                <h5 className={valuationStyles.hint}>6 084 zł netto</h5>
+                <h5 className={valuationStyles.hint}>
+                  {currencyFormat(currNetMaterialsCost)} zł netto
+                </h5>
               </div>
             </div>
           </div>
           <div className={valuationStyles.hr}></div>
           <div className={valuationStyles.valuationSummary}>
             <div className={`${valuationStyles.textContainer}`}>
-              <h4 className={valuationStyles.servicesSummaryHeader}>
+              <h4 className={valuationStyles.valuationSummaryHeader}>
                 Koszt całkowity + koszt materiałów
               </h4>
               <h5 black className={valuationStyles.header}>
@@ -328,9 +406,12 @@ const ValuationSheet = (props) => {
 
             <div className={`${valuationStyles.price}`}>
               <h5 black className={valuationStyles.priceHeader}>
-                6 654,72 zł
+                {currencyFormat(currGrossWorksCost + currGrossMaterialsCost)} zł
               </h5>{" "}
-              <h5 className={valuationStyles.hint}>6 084 zł netto</h5>
+              <h5 className={valuationStyles.hint}>
+                {currencyFormat(currNetWorksCost + currNetMaterialsCost)} zł
+                netto
+              </h5>
             </div>
           </div>
           <div className={valuationStyles.hr}></div>

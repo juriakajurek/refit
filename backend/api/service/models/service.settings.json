@@ -30,6 +30,22 @@
     },
     "netUnitPrice": {
       "type": "decimal"
+    },
+    "materialGrossUnitPrice": {
+      "type": "decimal"
+    },
+    "materialNetUnitPrice": {
+      "type": "decimal"
+    },
+    "materialName": {
+      "type": "string"
+    },
+    "tooltip": {
+      "type": "string"
+    },
+    "isHidden": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

@@ -1,17 +1,15 @@
-// import { useStaticQuery, graphql } from "gatsby";
 import React from "react";
 import footerStyles from "./footer.module.scss";
 import Facebook from "../images/facebook.svg";
-import { Link } from "gatsby";
 
 const Footer = () => {
-  //const data = useStaticQuery(graphql``);
   return (
     <footer className={footerStyles.footer}>
       <div className={footerStyles.socialLink}>
-        <Link
+        <a
           href="https://www.facebook.com/refitWro/"
           target="_blank"
+          rel="noreferrer"
           className={footerStyles.link}
         >
           refit
@@ -20,7 +18,7 @@ const Footer = () => {
             src={Facebook}
             alt="facebook icon"
           ></img>
-        </Link>
+        </a>
       </div>
     </footer>
   );

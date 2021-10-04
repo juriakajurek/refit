@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/layout";
 // import Form from "../components/form";
 // import formStyles from "./form.module.scss";
 import { connect } from "react-redux";
-import { Link, useStaticQuery, useQuery, navigate, graphql } from "gatsby";
+import { navigate } from "gatsby";
 import { useMutation, gql } from "@apollo/client";
-import initialSurveyStyles from "./initialSurvey.module.scss";
 import contactFormStyles from "./contactForm.module.scss";
 import RoomsForValuation from "../components/roomsForValuation";
 import InputField from "../components/inputField";
 import Header from "../components/header";
 import Paragraph from "../components/paragraph";
 import LinkButton from "../components/linkButton";
+import RoundLoader from "../components/round-loader";
 import ExternalLinkButton from "../components/externalLinkButton";
 import { getDate } from "../utils/getDate";
 
@@ -149,49 +149,28 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const ContactForm = (props) => {
-  const [isValuationSaved, setValuationSaved] = useState(false);
-  const [valuationId, setValuationId] = useState();
-  const [createdDate, setCreatedDate] = useState();
+  // const [isValuationSaved, setValuationSaved] = useState(false);
+  // const [valuationId, setValuationId] = useState();
+  // const [createdDate, setCreatedDate] = useState();
   const [listOfRooms, setListOfRooms] = useState([]);
+  const [isContentLoaded, setContentLoaded] = useState(false);
 
   const [addRoom, { addRoomData }] = useMutation(ADD_ROOM);
   const [addQuestionnaire, { addQuestionnaireData }] = useMutation(
     ADD_QUESTIONNAIRE
   );
 
-  const BACKEND_URL = process.env.GATSBY_BACKEND_URL;
+  useEffect(() => {
+    setContentLoaded(true);
+    console.log("contactForm content loaded");
+  }, []);
 
-  // const getService = useStaticQuery(graphql`
-  //   query {
-  //     allStrapiServices {
-  //       edges {
-  //         node {
-  //           strapiId
-  //           name
-  //         }
-  //       }
-  //     }
-  //   }
-  // `);
-  // const services = getService.allStrapiServices.edges;
+  const BACKEND_URL = process.env.GATSBY_BACKEND_URL;
 
   const ConnectedRoomsForValuation = connect(
     mapStateToProps,
     mapDispatchToProps
   )(RoomsForValuation);
-
-  // const getCategory = (index) => {
-  //   switch (index) {
-  //     case value:
-  //       break;
-
-  //     case value:
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-  // };
 
   const saveValuation = async () => {
     if (true /*!isValuationSaved*/) {
@@ -203,7 +182,7 @@ const ContactForm = (props) => {
         const selectedRoomServices = props.serviceForms.value.filter(
           //wez services
           (room) => {
-            return room.name == selectedRoom;
+            return room.name === selectedRoom;
           }
         )[0].values;
 
@@ -245,6 +224,7 @@ const ContactForm = (props) => {
                 .catch((err) => {
                   console.log(err);
                 });
+            else return -1;
           }),
         ];
       });
@@ -328,96 +308,117 @@ const ContactForm = (props) => {
   };
 
   return (
-    <Layout heading="Prawie gotowe" selectedStep={3} backArrow={true}>
-      <div className={contactFormStyles.contactForm}>
-        <ConnectedRoomsForValuation
-          icon="tick"
-          onClick={(e) => {
-            navigate(
-              `/servicesChoice?showedRoom=${e.target.parentNode.children[0].innerHTML}`
-            );
-          }}
-        />
-        <Header heading="Informacje końcowe" />
-        <Paragraph>Podaj nam resztę niezbędnych informacji</Paragraph>
-        <br />
-        <InputField
-          value={props.firstName}
-          onChange={(e) => {
-            props.setFirstName(e.target.value);
-          }}
-          placeholder="Imię"
-        />
-        <InputField
-          placeholder="Telefon"
-          value={props.phoneNumber}
-          onChange={(e) => {
-            props.setPhoneNumber(e.target.value);
-          }}
-        />
-        <InputField
-          placeholder="Email"
-          value={props.email}
-          onChange={(e) => {
-            props.setEmail(e.target.value);
-          }}
-        />
-        <LinkButton
-          disabled={
-            !(props.selectedRooms.value && props.selectedRooms.value.length)
-          }
-          btn
-          title="Zobacz wycenę"
-          onClick={async () => {
-            await saveValuation().then((val) => {
-              setValuationSaved(true);
-
-              console.log(val);
+    <>
+      <RoundLoader active={!isContentLoaded}></RoundLoader>
+      <Layout heading="Prawie gotowe" selectedStep={3} backArrow={true}>
+        <div className={contactFormStyles.contactForm}>
+          <ConnectedRoomsForValuation
+            icon="tick"
+            onClick={(e) => {
+              console.log(e.target.parentNode.textContent);
               navigate(
-                `/valuation?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}`
+                `/servicesChoice?showedRoom=${e.target.parentNode.textContent}`
               );
-            });
-          }}
-        ></LinkButton>
+            }}
+          />
+          <Header
+            style={{
+              marginBottom: 0,
+            }}
+            heading="Informacje końcowe"
+          />
+          <Paragraph>Podaj nam resztę niezbędnych informacji</Paragraph>
+          <br />
+          <InputField
+            value={props.firstName}
+            onChange={(e) => {
+              props.setFirstName(e.target.value);
+            }}
+            placeholder="Imię"
+          />
+          <InputField
+            placeholder="Telefon"
+            value={props.phoneNumber}
+            onChange={(e) => {
+              props.setPhoneNumber(parseInt(e.target.value));
+            }}
+          />
+          <InputField
+            placeholder="Email"
+            value={props.email}
+            onChange={(e) => {
+              props.setEmail(e.target.value);
+            }}
+          />
+          <LinkButton
+            disabled={
+              !(props.selectedRooms.value && props.selectedRooms.value.length)
+            }
+            btn
+            title="Zobacz wycenę"
+            onClick={async () => {
+              await saveValuation().then((val) => {
+                // setValuationSaved(true);
 
-        <ExternalLinkButton
-          disabled={
-            !(props.selectedRooms.value && props.selectedRooms.value.length)
-          }
-          btn
-          target="_blank"
-          onClick={async () => {
-            await saveValuation().then((val) => {
-              setValuationSaved(true);
+                console.log(val);
+                navigate(
+                  `/valuation?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}`
+                );
+              });
+            }}
+          ></LinkButton>
 
-              console.log(val);
-              navigate(
-                `${BACKEND_URL}/generatePDF?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}`
-              );
-            });
-          }}
-          title="Pobierz wycenę"
-        ></ExternalLinkButton>
-        <ExternalLinkButton
-          disabled={
-            !(props.selectedRooms.value && props.selectedRooms.value.length)
-          }
-          btn
-          target="_blank"
-          onClick={async () => {
-            await saveValuation().then((val) => {
-              setValuationSaved(true);
+          <ExternalLinkButton
+            disabled={
+              !(props.selectedRooms.value && props.selectedRooms.value.length)
+            }
+            btn
+            target="_blank"
+            onClick={async () => {
+              await saveValuation().then((val) => {
+                window.open(
+                  `${BACKEND_URL}/generatePDF?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}`
+                );
+              });
+            }}
+            title="Pobierz wycenę"
+          ></ExternalLinkButton>
+          <ExternalLinkButton
+            disabled={
+              !(props.selectedRooms.value && props.selectedRooms.value.length)
+            }
+            btn
+            target="_blank"
+            onClick={async () => {
+              await saveValuation().then((val) => {
+                window.open(
+                  `${BACKEND_URL}/printPDF?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}`
+                );
+              });
+            }}
+            title="Pobierz wersję do druku"
+          ></ExternalLinkButton>
+          <ExternalLinkButton
+            disabled={
+              !(props.selectedRooms.value && props.selectedRooms.value.length)
+            }
+            btn
+            target="_blank"
+            onClick={async () => {
+              await saveValuation().then((val) => {
+                // setValuationSaved(true);
 
-              console.log(val);
-              window.open(
-                `${BACKEND_URL}/sendMail?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}&email=${props.email}`
-              );
-            });
-          }}
-          title="Wyślij wycenę na email"
-        ></ExternalLinkButton>
-      </div>
-    </Layout>
+                console.log(val);
+                window.open(
+                  `${BACKEND_URL}/sendMail?valuationId=${val.valuationId}&documentDate=${val.createdDate}&name=${props.firstName}&email=${props.email}`
+                );
+              });
+            }}
+            title="Wyślij wycenę na email"
+          ></ExternalLinkButton>
+        </div>
+      </Layout>{" "}
+    </>
   );
 };
 

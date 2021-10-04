@@ -3,11 +3,7 @@ import inputFieldStyles from "./inputField.module.scss";
 
 const ExternalLinkButton = (props) => {
   return (
-    <a
-      href={!props.disabled ? props.to : null}
-      target={props.target}
-      className={inputFieldStyles.link}
-    >
+    <a href={props.to} target="_blank">
       <div className={inputFieldStyles.inputContainer} style={props.style}>
         <button
           disabled={props.disabled ? true : false}
