@@ -1,0 +1,42 @@
+.view {
+  width: 100vw;
+  height: 100vh;
+
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  z-index: -1000;
+  //   transform: scale(0.9);
+  &.active {
+    visibility: visible;
+    opacity: 1;
+    z-index: 1000;
+    // transform: scale(1.5);
+  }
+
+  background-color: white;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .logo {
+    // padding: 2.5rem;
+    .icon {
+      animation-name: scale;
+      animation-duration: 1s;
+      animation-iteration-count: 1;
+      animation-timing-function: ease;
+    }
+  }
+}
+
+@keyframes scale {
+  60% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.react-datepicker__navigation--previous {
+  background: url("./images/leftArrow.svg") no-repeat !important;
+  background-size: 1rem 1rem !important;
+  background-position: center !important;
+}
+.react-datepicker__navigation--next {
+  background: url("./images/rightArrow.svg") no-repeat !important;
+  background-size: 1rem 1rem !important;
+  background-position: center !important;
+}

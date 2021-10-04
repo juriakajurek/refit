@@ -1,0 +1,30 @@
+.header {
+  @import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap");
+  width: 100%;
+  .headerModule {
+    width: 90%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    h3 {
+      font-weight: 600;
+      letter-spacing: 0.2rem;
+      line-height: 2.7rem;
+      color: #888888;
+    }
+  }
+  .backArrow {
+    margin-right: 1.5rem;
+  }
+  .title {
+    display: flex;
+    font-family: "Red Hat Display", sans-serif;
+    font-weight: 600;
+    font-size: 36px;
+    letter-spacing: 0.2rem;
+    line-height: 40px;
+    color: #000000;
+  }
+}
