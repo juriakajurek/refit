@@ -10,7 +10,7 @@ The client fills in a form in which he describes the scope of work needed to be 
 
 ---
 
-![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+![presentation film](https://github.com/juriakajurek/refit/blob/master/demo/simplescreenrecorder-2022-04-04_19.48.27.gif?raw=true)
 
 ---
 
